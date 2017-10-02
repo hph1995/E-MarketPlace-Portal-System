@@ -23,7 +23,7 @@
 			}
 			
 			//Check default user
-			$Adduser = "SELECT count(NRIC) AS intNum FROM tbllogin WHERE NRIC = '999999999999'";
+			$Adduser = "SELECT count(NRIC) AS intNum FROM tbluser WHERE NRIC = '999999999999'";
 			$AddResult = mysql_query($Adduser, $dbLink);
 			$Row = mysql_fetch_array($AddResult);
 			if($Row['intNum'] > 0)
@@ -33,7 +33,7 @@
 			else
 			{
 				//adding default account
-				$Add = "INSERT INTO tbllogin (NRIC, username, password, accType, status) VALUES('999999999999', 'admin', '".md5('admin')."', 'ADMINISTRATOR', 'ACTIVE')";
+				$Add = "INSERT INTO tbluser (NRIC, username, password, accType, status) VALUES('999999999999', 'admin', '".md5('admin')."', 'ADMINISTRATOR', 'ACTIVE')";
 				$AddNewResult = mysql_query($Add, $dbLink);
 			}
 		}
@@ -42,7 +42,7 @@
 			//Create New Database
 			$SQL = "CREATE DATABASE ".$dbName;
 			mysql_query($SQL, $dbLink);
-			echo "<script> alert('Database added'); </script>";
+			echo "<script> alert('Database added successfully'); </script>";
 		}
 	}
 	else
