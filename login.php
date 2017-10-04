@@ -1,3 +1,6 @@
+<?php
+include('dbEMarketplace.php'); //include database.
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,34 +29,7 @@
   <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-      <div class="container">
-        <a class="navbar-brand" href="index.html">Deallo</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          Menu
-          <i class="fa fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="about.html">About</a>
-            </li>
-			<li class="nav-item">
-              <a class="nav-link" href="#">Sell on Deallo</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="login.php">LogIn</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="register.php">SignUp</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <?php require_once('navbar.php'); ?>
 
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('img/home-bg.jpg')">
@@ -68,78 +44,73 @@
         </div>
       </div>
     </header>
-
+<?php 
+	if($_POST['login_btn'])
+	{
+		//check whether account is correct or not
+		$account_SQL = "SELECT * FROM tblaccount WHERE username = '".strtoupper(trim($_POST['username']))."' AND password = '".strtoupper(md5($_POST['password']))."' AND status ='ACTIVE'";
+		$account_SQL_result = mysql_query($account_SQL,$dbLink);
+		while ($row = mysql_fetch_array($account_SQL_result, MYSQL_ASSOC))
+		{
+    		$account_id =  $row['accountId'];
+			$acc_type = $row['accType'];
+		}
+		if(mysql_num_rows($account_SQL_result) > 0)
+		{
+			
+			if($acc_type == 'CUSTOMER')
+			{
+				echo "<script>alert('Correct. you are customer. GG LAU YI CHENG HAHAHAHA');location = 'login.php';</script>";
+			}
+			else if($acc_type == 'ADMINISTRATOR')
+			{
+				echo "<script>alert('Correct. you are admin');location = 'login.php';</script>";
+			}
+		}
+		else
+		{
+			echo "<script>alert('Account or password is not correct');location = 'login.php';</script>";
+		}
+	}
+	else
+	{
+?>
     <!-- Main Content -->
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <p>Please fill in all information</p>
+          <p>Please login your account</p>
           <!-- Contact Form - Enter your email address on line 19 of the mail/contact_me.php file to make this form work. -->
           <!-- WARNING: Some web hosts do not allow emails to be sent through forms to common mail hosts like Gmail or Yahoo. It's recommended that you use a private domain email address! -->
           <!-- NOTE: To use the contact form, your site must be on a live web host with PHP! The form will not work locally! -->
-          <form name="sentMessage" id="contactForm" novalidate>
+          <form name="sentMessage" id="contactForm" method="post">
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Enter your Username</label>
-                <input type="text" class="form-control" placeholder="Username" id="name">
+                <input type="text" class="form-control" placeholder="Username" id="username" name="username" required data-validation-required-message="Please enter your name." pattern="[A-Za-z @.1-90]+" title="Wrong username.">
                 <p class="help-block text-danger"></p>
               </div>
             </div>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Enter your password</label>
-                <input type="password" class="form-control" placeholder="Password" id="password">
+                <input type="password" class="form-control" placeholder="Password" id="password" name="password" required data-validation-required-message="Please enter your password." title="Wrong password.">
                 <p class="help-block text-danger"></p>
               </div>
             </div>
             <br>
             <div id=""></div>
             <div class="form-group">
-              <button type="submit" class="btn btn-secondary" id="sendMessageButton">Send</button>
-            </div>
+              <input type="submit" class="btn btn-secondary" id="login_btn" name="login_btn" value="Login">
           </form>
         </div>
       </div>
     </div>
-
+	<?php } ?>
     <hr>
 
     <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <ul class="list-inline text-center">
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <p class="copyright text-muted">Copyright &copy; Your Website 2017</p>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <?php include('footer.php');?>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -147,7 +118,6 @@
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- Contact Form JavaScript -->
-
 
     <!-- Custom scripts for this template -->
     <script src="js/clean-blog.min.js"></script>
