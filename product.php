@@ -6,12 +6,22 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
 <title>E-Market Portal</title>
-<link rel="stylesheet" href="css/bootstrap.min.css">
+<!-- Bootstrap core CSS -->
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom fonts for this template -->
+<link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+<!-- Custom styles for this template -->
+<link href="css/clean-blog.min.css" rel="stylesheet">
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="css/menuBootstrap.css">
 <script language="javascript">
     $(document).ready(function(){
         $("#btnStock").click(function(){
@@ -63,12 +73,53 @@
 
 </script>
 </head>
-
     <?php 
-        //include('menu(bootstrap).php');
         include('dbEMarketplace.php');
     ?>
 <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Deallo</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Sell on Deallo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.php">LogIn</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="register.php">SignUp</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="site-heading">
+              <h1>Product Information</h1>
+              <span class="subheading">Sign in with your Deallo Account</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
     <?php
     if($_POST['btnSubmitProduct'])
     {
@@ -105,7 +156,7 @@
     }
     else
     { ?>
-    <form id="formProduct" name="formProduct" method="post" class="form-horizontal" style="margin-top: 100px;" action="">
+    <form id="formProduct" name="formProduct" method="post" style="margin-top: 100px;" action="">
     <?php   
         if($_GET['mode'] == 'view')
         { 
@@ -117,40 +168,41 @@
             $getAllProduct = "SELECT * FROM tblproduct";
             $checkGetAllProduct = mysql_query($getAllProduct, $dbLink);
             ?>
-            <div class="container" style="background-color: #FFFFFF; width: 60%">
-              <h2>Product Table</h2>           
-              <table id="productTable" class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Place Manufacture</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                    if(mysql_num_rows($checkGetAllProduct) > 0)
-                    {
-                        for($i = 0; $i < mysql_num_rows($checkGetAllProduct); $i++)
+            <div style="margin: 10px;">
+                <h2 style="text-align: center;">Product Table</h2><br>       
+                <table id="productTable" class="table table-hover" style="width: 100%">
+                    <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Product Name</th>
+                          <th>Category</th>
+                          <th>Description</th>
+                          <th>Place Manufacture</th>
+                          <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        if(mysql_num_rows($checkGetAllProduct) > 0)
                         {
-                            $allProduct = mysql_fetch_array($checkGetAllProduct);
-                            echo '<tr id="stockRow'.($i+1).'">';
-                            echo '<td>'.($i+1).'</td>';
-                            echo '<td>'.ucwords(strtolower($allProduct['productName'])).'</td>';
-                            echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
-                            echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';
-                            echo '<td>'.ucwords(strtolower($allProduct['placeManufacture'])).'</td>';
-                            echo '<td><button type="button" id="btnEditProduct'.($i+1).'" name="btnEditProduct" title="Edit" onClick="editRow('.($i+1).', \''.ucwords(strtolower($allProduct['productID'])).'\', \''.ucwords(strtolower($allProduct['productName'])).'\', \''.ucwords(strtolower($allProduct['category'])).'\', \''.ucwords(strtolower($allProduct['description'])).'\', \''.ucwords(strtolower($allProduct['placeManufacture'])).'\');" style="border: 0; background: transparent; cursor:pointer;" value="'.$stockInfo['drugID'].'" ><img src="img/edit.png" width="20" height="20" alt="submit" /></button>
-                            <button onclick="if(confirm(\'Are you sure want to delete?\') == true ){ return true; } else { return false;}" type="submit" id="btnDelProduct'.($i+1).'" name="btnDelProduct" title="Delete" style="border: 0; background: transparent; margin-left:5px; cursor:pointer;" value="'.$allProduct['productID'].'"><img src="img/remove.png" width="20" height="20" alt="delete" /></button></td>';
-                            echo '</tr>';
+                            for($i = 0; $i < mysql_num_rows($checkGetAllProduct); $i++)
+                            {
+                                $allProduct = mysql_fetch_array($checkGetAllProduct);
+                                echo '<tr id="stockRow'.($i+1).'">';
+                                echo '<td>'.($i+1).'</td>';
+                                echo '<td>'.ucwords(strtolower($allProduct['productName'])).'</td>';
+                                echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
+                                echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';
+                                echo '<td>'.ucwords(strtolower($allProduct['placeManufacture'])).'</td>';
+                                echo '<td><button type="button" id="btnEditProduct'.($i+1).'" name="btnEditProduct" title="Edit" onClick="editRow('.($i+1).', \''.ucwords(strtolower($allProduct['productID'])).'\', \''.ucwords(strtolower($allProduct['productName'])).'\', \''.ucwords(strtolower($allProduct['category'])).'\', \''.ucwords(strtolower($allProduct['description'])).'\', \''.ucwords(strtolower($allProduct['placeManufacture'])).'\');" style="border: 0; background: transparent; cursor:pointer;" value="'.$stockInfo['drugID'].'" ><img src="img/edit.png" width="20" height="20" alt="submit" /></button>
+                                <button onclick="if(confirm(\'Are you sure want to delete?\') == true ){ return true; } else { return false;}" type="submit" id="btnDelProduct'.($i+1).'" name="btnDelProduct" title="Delete" style="border: 0; background: transparent; margin-left:5px; cursor:pointer;" value="'.$allProduct['productID'].'"><img src="img/remove.png" width="20" height="20" alt="delete" /></button></td>';
+                                echo '</tr>';
+                            }
                         }
-                    }
-                    ?>
-                </tbody>
-              </table>
+                        ?>
+                    </tbody>
+                </table>
+                <br>
             </div>
         <?php }
         else
@@ -165,49 +217,99 @@
                 }
             }*/
     ?>
-        <div class="container" style="background-color: #FFFFFF; width: 60%">
-            <div class="form-group">
-                <label class="control-label col-sm-7"><h3>Product Information</h3></label>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-5">Product Name:</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="txtproName" name="txtproName" placeholder="Enter product name" value="<?php if($_GET['mode'] == 'view') echo $proInfo['productName'];?>">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-5">Category:</label>
-                <div class="col-sm-4">
-                    <select class="form-control" id="selCategory" name="selCategory">
-                        <option value="CLOTHING" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "CLOTHINGS") echo 'selected';}?>>Clothing</option>
-                        <option value="ELECTRONIC" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "ELECTRONIC") echo 'selected';}?>>Electronic</option>
-                        <option value="SPORT" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "SPORT") echo 'selected';}?>>Sport</option>
-                        <option value="TRAVEL" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "TRAVEL") echo 'selected';}?>>Travel</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-5">Description:</label>
-                <div class="col-sm-4">
-                    <textarea class="form-control" id="txtDescr" name="txtDescr" rows="3" placeholder="Enter product description"><?php if($_GET['mode'] == 'view') echo $proInfo['description']; ?></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-5">Place of Manufacture:</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="txtPlaceManufacture" name="txtPlaceManufacture" placeholder="Enter place manufacture" value="<?php if($_GET['mode'] == 'view') echo $proInfo['placeManufacture'];?>">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label col-sm-6">
-                    <input type="submit" name="btnSubmitProduct" class="btn btn-primary" value="<?php if($_GET['mode'] == 'view') echo 'Edit'; else echo 'Submit';?>">
-                </div>
-                <div class="control-label col-sm-1  ">
-                    <input type="submit" name="btnCancelProduct" class="btn btn-danger" value="Cancel">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <p>Please fill in all information</p>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls">
+                            <label>Product Name</label>
+                            <input type="text" class="form-control" id="txtproName" name="txtproName" placeholder="Enter product name" value="<?php if($_GET['mode'] == 'view') echo $proInfo['productName'];?>">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls"">
+                            <label>Category</label>
+                            <select class="form-control" id="selCategory" name="selCategory">
+                                <option value="CLOTHING" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "CLOTHINGS") echo 'selected';}?>>Clothing</option>
+                                <option value="ELECTRONIC" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "ELECTRONIC") echo 'selected';}?>>Electronic</option>
+                                <option value="SPORT" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "SPORT") echo 'selected';}?>>Sport</option>
+                                <option value="TRAVEL" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "TRAVEL") echo 'selected';}?>>Travel</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls"">
+                            <label>Description</label>
+                            <textarea class="form-control" id="txtDescr" name="txtDescr" rows="3" placeholder="Enter product description"><?php if($_GET['mode'] == 'view') echo $proInfo['description']; ?></textarea>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls"">
+                            <label>Place of Manufacture</label>
+                            <input type="text" class="form-control" id="txtPlaceManufacture" name="txtPlaceManufacture" placeholder="Enter place manufacture" value="<?php if($_GET['mode'] == 'view') echo $proInfo['placeManufacture'];?>">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <input type="submit" name="btnSubmitProduct" class="btn btn-secondary" value="<?php if($_GET['mode'] == 'view') echo 'Edit'; else echo 'Submit';?>">
+                        <input type="submit" name="btnCancelProduct" class="btn btn-danger" value="Cancel">
+                    </div>
                 </div>
             </div>
         </div>
     </form> 
+
     <?php } } ?>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyright &copy; Your Website 2017</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Contact Form JavaScript -->
+
+
+    <!-- Custom scripts for this template -->
+    <script src="js/clean-blog.min.js"></script>
 </body>
 </html>
