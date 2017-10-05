@@ -55,7 +55,16 @@ include('dbEMarketplace.php'); //include database.
                 Product Categories
               </h2>
               <h3 class="post-subtitle">
-                ......
+                Clothing
+              </h3>
+			  <h3 class="post-subtitle">
+                Electronic
+              </h3>
+			  <h3 class="post-subtitle">
+                Sport
+              </h3>
+			  <h3 class="post-subtitle">
+                Travel
               </h3>
             </a>
            
