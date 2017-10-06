@@ -35,8 +35,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.php">Home</a>
+			<?php if(!isset($_SESSION['account_login']))
+			{
+			echo '<li class="nav-item">
+              <a class="nav-link" href="index.php"></a>
+			
             </li>
             <li class="nav-item">
               <a class="nav-link" href="about.html">About</a>
@@ -49,7 +52,28 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="register.php">SignUp</a>
+            </li>';
+			}
+			else
+			{
+				echo '
+				<li class="nav-item">
+				<a class="nav-link" href="customer.php">Customer</a>
             </li>
+				<li class="nav-item">
+				<a class="nav-link" href="staff.php">Staff</a>
+            </li>
+				<li class="nav-item">
+				<a class="nav-link" href="product_manage.php">Product</a>
+            </li>
+				<li class="nav-item">
+				<a class="nav-link" href="#">'.$_SESSION['account_login'].'</a>
+            </li>
+				<li class="nav-item">
+				<a class="nav-link" href="logout.php">logout</a>
+            </li>';
+			}
+			?>
           </ul>
         </div>
       </div>

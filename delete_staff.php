@@ -38,46 +38,44 @@ session_start();
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>LogIn</h1>
-              <span class="subheading">Sign in with your Deallo Account</span>
+              <h1>Delete Account</h1>
+              <span class="subheading">Delete Staff Account</span>
             </div>
           </div>
         </div>
       </div>
     </header>
-<?php 
-	if($_POST['login_btn'])
+<?php
+	if($_POST['register_btn'])
 	{
-		//check whether account is correct or not
-		$account_SQL = "SELECT * FROM tblaccount WHERE username = '".strtoupper(trim($_POST['username']))."' AND password = '".strtoupper(md5($_POST['password']))."' AND status ='ACTIVE'";
-		$account_SQL_result = mysql_query($account_SQL,$dbLink);
-		while ($row = mysql_fetch_array($account_SQL_result, MYSQL_ASSOC))
+		$username_SQL = "SELECT * FROM tblaccount WHERE username ='".$_POST['username']."' AND accType='STAFF'"; 
+		$username_SQL_result = mysql_query($username_SQL,$dbLink);
+		if(!mysql_num_rows($username_SQL_result) > 0)
 		{
-    		$account_id =  $row['accountId'];
-			$acc_type = $row['accType'];
-		}
-		if(mysql_num_rows($account_SQL_result) > 0)
-		{
-			
-			if($acc_type == 'CUSTOMER')
-			{
-				echo "<script>alert('Correct. you are customer. GG LAU YI CHENG HAHAHAHA');location = 'login.php';</script>";
-				$_SESSION['account_login'] = strtoupper($_POST['username']);
-			}
-			else if($acc_type == 'ADMINISTRATOR')
-			{
-				echo "<script>alert('Correct. you are admin');location = 'admin.php';</script>";
-				$_SESSION['account_login'] = strtoupper($_POST['username']);
-			}
-			else
-			{
-				echo "<script>alert('Correct. you are staff');location = '#';</script>";
-				$_SESSION['account_login'] = strtoupper($_POST['username']);
-			}
+			echo "<script>alert('Username not exists !');window.history.back();</script>";
 		}
 		else
 		{
-			echo "<script>alert('Account or password is not correct');location = 'login.php';</script>";
+		
+		// select last accountID from tblaccount
+		$accountID = mysql_query("SELECT accountID FROM tblaccount WHERE username = '".$_POST['username']."'");
+		while ($row = mysql_fetch_array($accountID, MYSQL_ASSOC))
+		{
+			$id = $row['accountID'];
+		}
+		$delete_account = "DELETE FROM tblaccount WHERE accountID='$id'";
+		$delete_personnel = "DELETE FROM tblpersonnel WHERE accountID='$id'";
+			$delete_account_result = mysql_query($delete_account,$dbLink);
+			$delete_personnel_result = mysql_query($delete_personnel,$dbLink);
+			
+			if($delete_account_result && $delete_account_result)
+			{
+				echo "<script>alert('Customer deleted!');location = 'staff.php';</script>";
+			}
+			else
+			{
+				echo "<script>alert('Failed to delete account! Please inform our staff.');</script>";
+			}
 		}
 	}
 	else
@@ -87,29 +85,22 @@ session_start();
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <p>Please login your account</p>
-          <!-- Contact Form - Enter your email address on line 19 of the mail/contact_me.php file to make this form work. -->
-          <!-- WARNING: Some web hosts do not allow emails to be sent through forms to common mail hosts like Gmail or Yahoo. It's recommended that you use a private domain email address! -->
-          <!-- NOTE: To use the contact form, your site must be on a live web host with PHP! The form will not work locally! -->
+          <p>Please fill in all information to register your account</p>
+          
           <form name="sentMessage" id="contactForm" method="post">
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Enter your Username</label>
-                <input type="text" class="form-control" placeholder="Username" id="username" name="username" required data-validation-required-message="Please enter your name." pattern="[A-Za-z @.1-90]+" title="Wrong username.">
-                <p class="help-block text-danger"></p>
-              </div>
-            </div>
-            <div class="control-group">
-              <div class="form-group floating-label-form-group controls">
-                <label>Enter your password</label>
-                <input type="password" class="form-control" placeholder="Password" id="password" name="password" required data-validation-required-message="Please enter your password." title="Wrong password.">
+                <input type="text" class="form-control" placeholder="Username" id="username" name="username" required data-validation-required-message="Please enter your username."  pattern="[A-Za-z @.1-90]+" title="Please use numbers or characters.">
                 <p class="help-block text-danger"></p>
               </div>
             </div>
             <br>
+			
             <div id=""></div>
             <div class="form-group">
-              <input type="submit" class="btn btn-secondary" id="login_btn" name="login_btn" value="Login">
+              <input type="submit" class="btn btn-secondary" id="register_btn" name = "register_btn" value="Delete"/>
+            </div>
           </form>
         </div>
       </div>
@@ -127,6 +118,7 @@ session_start();
 
     <!-- Contact Form JavaScript -->
 
+	
     <!-- Custom scripts for this template -->
     <script src="js/clean-blog.min.js"></script>
 

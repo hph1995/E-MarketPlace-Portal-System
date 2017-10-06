@@ -38,8 +38,8 @@ session_start();
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Registration</h1>
-              <span class="subheading">Create your Deallo Account</span>
+              <h1>Edit Staff</h1>
+              <span class="subheading">Edit staff account</span>
             </div>
           </div>
         </div>
@@ -48,54 +48,45 @@ session_start();
 <?php
 	if($_POST['register_btn'])
 	{
-		$username_SQL = "SELECT * FROM tblaccount WHERE username ='".$_POST['username']."'"; 
+		$username_SQL = "SELECT * FROM tblaccount WHERE username ='".$_POST['username']."' AND accType='STAFF'"; 
 		$username_SQL_result = mysql_query($username_SQL,$dbLink);
-		if(mysql_num_rows($username_SQL_result) > 0)
+		if(!mysql_num_rows($username_SQL_result) > 0)
 		{
-			$flag = 1;
-			echo "<script>alert('Username exists !');window.history.back();</script>";
-		}
-		else if($_POST['password'] != $_POST['c_password'])
-		{
-			echo "<script>alert('Confirm password is not correct!'); window.history.back();</script>";
+
+			echo "<script>alert('Username not exists !');window.history.back();</script>";
 		}
 		else
 		{
-		// insert username and password into tblaccount.
-			$account_SQL = "INSERT INTO tblaccount(username, password, accType, status)
-			VALUE('". strtoupper(trim($_POST['username']))."',
-			'". strtoupper(md5($_POST['password']))."', 'CUSTOMER','ACTIVE')";
 		
 		// select last accountID from tblaccount
-		$accountID = mysql_query("SELECT accountID FROM tblaccount ORDER BY accountID DESC LIMIT 1");
+		$accountID = mysql_query("SELECT accountID FROM tblaccount WHERE username = '".$_POST['username']."'");
 		while ($row = mysql_fetch_array($accountID, MYSQL_ASSOC))
 		{
-			$id = $row['accountID'] + 1;
+			$id = $row['accountID'];
 		}
 	
 		
 			// insert rest of the data into tblpersonal
-			$personal_SQL = "INSERT INTO tblpersonnel(accountID, name, NRIC, email, addr, city, state, country, contactNum)
-			VALUE('".$id."',
-				  '". strtoupper(trim($_POST['full_name']))."',
-				  '". strtoupper(trim($_POST['ic']))."',
-				  '". strtoupper(trim($_POST['email']))."',
-				  '". strtoupper(trim($_POST['address']))."',
-				  '". strtoupper(trim($_POST['city']))."', 
-				  '". strtoupper(trim($_POST['state']))."', 
-				  '". strtoupper(trim($_POST['country']))."', 
-				  '". strtoupper(trim($_POST['phone_num']))."')";
+			$update_personnel = "UPDATE tblpersonnel SET 
+			name = '". strtoupper(trim($_POST['full_name']))."', 			
+			NRIC = '". strtoupper(trim($_POST['ic']))."', 
+			email = '". strtoupper(trim($_POST['email']))."',
+			addr = '". strtoupper(trim($_POST['address']))."',
+			country = '". strtoupper(trim($_POST['country']))."',
+			state = '". strtoupper(trim($_POST['state']))."',
+			city = '". strtoupper(trim($_POST['city']))."',
+			contactNum = '". strtoupper(trim($_POST['phone_num']))."'
+			WHERE accountID='".$id."'";
 		
-			$account_SQL_result = mysql_query($account_SQL,$dbLink);
-			$personal_SQL_result = mysql_query($personal_SQL,$dbLink);
+			$personal_SQL_result = mysql_query($update_personnel,$dbLink);
 			
-			if($account_SQL_result && $personal_SQL_result)
+			if($personal_SQL_result)
 			{
-				echo "<script>alert('Customer successfully add!');location = 'login.php';</script>";
+				echo "<script>alert('Staff updated!');location = 'add_staff.php';</script>";
 			}
 			else
 			{
-				echo "<script>alert('Failed to register account! Please inform our staff.'); location = 'login.php';</script>";
+				echo "<script>alert('Failed to edit account! Please inform our staff.');</script>";
 			}
 		}
 	}
@@ -106,7 +97,7 @@ session_start();
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <p>Please fill in all information to register your account</p>
+          <p>Please fill in all information to edit your account</p>
           
           <form name="sentMessage" id="contactForm" method="post">
             <div class="control-group">
@@ -116,20 +107,7 @@ session_start();
                 <p class="help-block text-danger"></p>
               </div>
             </div>
-            <div class="control-group">
-              <div class="form-group floating-label-form-group controls">
-                <label>Enter your password</label>
-                <input type="password" class="form-control" placeholder="Password" id="password" name="password" required data-validation-required-message="Please enter your password." minlength="6">
-                <p class="help-block text-danger"></p>
-              </div>
-            </div>
-			<div class="control-group">
-              <div class="form-group floating-label-form-group controls">
-                <label>Enter your password</label>
-                <input type="password" class="form-control" placeholder="Confirm Password" id="c_password" name="c_password" required data-validation-required-message="Please enter your password." minlength="6" title="Short passwords are easy to guess. Try one with at least 8 characters">
-                <p class="help-block text-danger"></p>
-              </div>
-            </div>
+           
 			<div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Enter your Full Name</label>

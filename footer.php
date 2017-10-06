@@ -30,7 +30,7 @@
               </li>
             </ul>
 			-->
-            <p class="copyright text-muted">Copyright &copy; LAUYICHENG 2B</p>
+            <p class="copyright text-muted">Copyright &copy; DP2</p>
 	<!--
           </div>
         </div>

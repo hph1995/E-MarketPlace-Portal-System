@@ -38,8 +38,8 @@ session_start();
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>LogIn</h1>
-              <span class="subheading">Sign in with your Deallo Account</span>
+              <h1>Admin</h1>
+              <span class="subheading"></span>
             </div>
           </div>
         </div>
@@ -62,17 +62,10 @@ session_start();
 			if($acc_type == 'CUSTOMER')
 			{
 				echo "<script>alert('Correct. you are customer. GG LAU YI CHENG HAHAHAHA');location = 'login.php';</script>";
-				$_SESSION['account_login'] = strtoupper($_POST['username']);
 			}
 			else if($acc_type == 'ADMINISTRATOR')
 			{
 				echo "<script>alert('Correct. you are admin');location = 'admin.php';</script>";
-				$_SESSION['account_login'] = strtoupper($_POST['username']);
-			}
-			else
-			{
-				echo "<script>alert('Correct. you are staff');location = '#';</script>";
-				$_SESSION['account_login'] = strtoupper($_POST['username']);
 			}
 		}
 		else
@@ -87,29 +80,15 @@ session_start();
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <p>Please login your account</p>
-          <!-- Contact Form - Enter your email address on line 19 of the mail/contact_me.php file to make this form work. -->
-          <!-- WARNING: Some web hosts do not allow emails to be sent through forms to common mail hosts like Gmail or Yahoo. It's recommended that you use a private domain email address! -->
-          <!-- NOTE: To use the contact form, your site must be on a live web host with PHP! The form will not work locally! -->
+
           <form name="sentMessage" id="contactForm" method="post">
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
-                <label>Enter your Username</label>
-                <input type="text" class="form-control" placeholder="Username" id="username" name="username" required data-validation-required-message="Please enter your name." pattern="[A-Za-z @.1-90]+" title="Wrong username.">
-                <p class="help-block text-danger"></p>
-              </div>
-            </div>
-            <div class="control-group">
-              <div class="form-group floating-label-form-group controls">
-                <label>Enter your password</label>
-                <input type="password" class="form-control" placeholder="Password" id="password" name="password" required data-validation-required-message="Please enter your password." title="Wrong password.">
-                <p class="help-block text-danger"></p>
-              </div>
+         
             </div>
             <br>
             <div id=""></div>
-            <div class="form-group">
-              <input type="submit" class="btn btn-secondary" id="login_btn" name="login_btn" value="Login">
+           
           </form>
         </div>
       </div>
@@ -133,3 +112,4 @@ session_start();
   </body>
 
 </html>
+

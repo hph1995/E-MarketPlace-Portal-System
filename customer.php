@@ -12,7 +12,7 @@ session_start();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>E-MarketPlace Portal</title>
+    <title>e-MarketPlace Portal System</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -30,7 +30,7 @@ session_start();
   <body>
 
     <!-- Navigation -->
-    <?php require_once('navbar.php'); ?>
+    <?php include('navbar.php'); ?>
 
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('img/home-bg.jpg')">
@@ -38,57 +38,27 @@ session_start();
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Deallo</h1>
-              <span class="subheading">An official e-commerce site of Deallo Craft House</span>
+              <h1>Customer Management</h1>
+              <span class="subheading"></span>
             </div>
           </div>
         </div>
       </div>
     </header>
-
     <!-- Main Content -->
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">
-                Product Categories
-              </h2>
-              <h3 class="post-subtitle">
-                ......
-              </h3>
-            </a>
-           
-          </div>
-          <hr>
-          <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">
-                Top Seller
-              </h2>
-			  <h3 class="post-subtitle">
-                ......
-              </h3>
-            </a>
-          </div>
-          <hr>
-          <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">
-                Top Products
-              </h2>
-              <h3 class="post-subtitle">
-                ............
-              </h3>
-            </a>
-      
-          </div>
-          <hr>   
-        </div>
-      </div>
-    </div>
-
+		<p>Please choose your operation under customer management</p>
+		<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Customer Management
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><a href="edit_customer.php">Edit</a></li>
+    <li><a href="delete_customer.php">Delete</a></li>
+  </ul>
+</div>
+         
     <hr>
 
     <!-- Footer -->
@@ -99,6 +69,9 @@ session_start();
     <script src="vendor/popper/popper.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
+    <!-- Contact Form JavaScript -->
+
+	
     <!-- Custom scripts for this template -->
     <script src="js/clean-blog.min.js"></script>
 
