@@ -123,6 +123,10 @@
     {
         echo '<script>location="";</script>';
     }
+    else if($_POST['btnBackForward'])
+    {
+        echo '<script>location="product_manage.php";</script>';
+    }
     else if($_POST['btnCancelProduct'])
     {
         echo "<script>location='';</script>";
@@ -172,6 +176,11 @@
                                 echo '</tr>';
                             }
                         }
+                        else
+                        {
+                            echo '<tr><td colspan="6" align="center">There are no product can be shown.</td></tr>';
+                        }
+                        echo '<tr><td colspan="6" align="center"><button type="submit" class="btn btn-danger" name="btnBackForward" id="btnBackForward" value="submit">Back</button></td></tr>';
                         ?>
                     </tbody>
                 </table>
@@ -180,15 +189,6 @@
         <?php }
         else
         {
-            /*if($_GET['mode'] == 'view')
-            {
-                $getProduct = "SELECT * FROM tblproduct WHERE productID = ".$_GET['pID']."";
-                $checkGetProduct = mysql_query($getProduct, $dbLink);
-                if(mysql_num_rows($checkGetProduct) > 0)
-                {
-                    $proInfo = mysql_fetch_array($checkGetProduct);
-                }
-            }*/
     ?>
         <div class="container">
             <div class="row">
@@ -247,41 +247,9 @@
     <hr>
 
     <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <ul class="list-inline text-center">
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <p class="copyright text-muted">Copyright &copy; Your Website 2017</p>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <?php
+    include('footer.php');
+    ?>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
