@@ -1,12 +1,13 @@
 <?php
+session_cache_limiter('private, must-revalidate');
 session_start();
 
     require_once "Mail.php";
 
     $from = "emarketplaceportal@gmail.com"; 
-    $to = "puonghock9@gmail.com";  
+    $to = $_SESSION['account_email'];  
     $subject = "E-MarketPlace Admin";
-    $body =  "Dear Sir/Madam,\n\n\n\tYou had subscribed this seller";
+    $body =  "Dear Sir/Madam,\n\n\n\tYou had subscribed this seller ".$_SESSION['sellerName']."";
 
     $host = "ssl://smtp.gmail.com";
     $port = "465";

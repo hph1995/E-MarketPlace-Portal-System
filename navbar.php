@@ -57,6 +57,10 @@
 			else
 			{
 				echo '
+        <li class="nav-item">
+        <a class="nav-link" href="seller.php">Seller</a>
+            </li>
+        <li class="nav-item">
 				<li class="nav-item">
 				<a class="nav-link" href="customer.php">Customer</a>
             </li>
