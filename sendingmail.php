@@ -3,11 +3,20 @@ session_cache_limiter('private, must-revalidate');
 session_start();
 
     require_once "Mail.php";
+    require_once "dbEMarketplace.php";
+
+    if($_GET['sID'] != "")
+    {
+        $getSeller = "SELECT * FROM tblpersonnel WHERE accountID = ".$_GET['sID']."";
+        $checkGetSeller = mysql_query($getSeller, $dbLink);
+        if($checkGetSeller) $sender = mysql_fetch_array($checkGetSeller);
+        $senderName = $sender['name'];
+    }
 
     $from = "emarketplaceportal@gmail.com"; 
     $to = $_SESSION['account_email'];  
     $subject = "E-MarketPlace Admin";
-    $body =  "Dear Sir/Madam,\n\n\n\tYou had subscribed this seller ".$_SESSION['sellerName']."";
+    $body =  "Dear Sir/Madam,\n\n\n\tYou had subscribed this seller ".$senderName."";
 
     $host = "ssl://smtp.gmail.com";
     $port = "465";

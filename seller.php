@@ -47,13 +47,10 @@
     {
       echo '<script>location="index.php";</script>';
     }
-    else if($_POST['btnSubscribe'])
-    {
-      $_SESSION['sellerName'] = "Wong King Huo";
-      echo '<script>location="sendingmail.php";</script>';
-    }
     else
     {
+      $getSeller = "SELECT * FROM tblaccount WHERE accType = 'SELLER'";
+      $checkGetSeller = mysql_query($getSeller, $dbLink);
     ?>
     <form id="formProduct" name="formProduct" method="post" style="margin-top: 100px;" action="">
       <div class="container">
@@ -69,12 +66,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Wong King Huo</td>
-                    <td>Umbrella, Water Bottle</td>
-                    <td><input type="submit" class="btn btn-primary" name="btnSubscribe" value="Subscribe"/></td>
-                  </tr>
+                  <?php 
+                    if(mysql_num_rows($checkGetSeller) > 0)
+                    {
+                      for($i = 0; $i < mysql_num_rows($checkGetSeller); $i++)
+                      {
+                        $accID = mysql_fetch_array($checkGetSeller);
+                        $getSellerInfo = "SELECT * FROM tblpersonnel WHERE accountID = ".$accID['accountID']."";
+                        $checkGetSellerInfo = mysql_query($getSellerInfo, $dbLink);
+                        if($checkGetSellerInfo) $sellerInfo = mysql_fetch_array($checkGetSellerInfo);
+                        echo '<tr>';
+                        echo '<td>'.($i+1).'</td>';
+                        echo '<td>'.$sellerInfo['name'].'</td>';
+                        echo '<input type="hidden" id="txtsellername'.($i+1).'" name="txtsellername'.($i+1).'" value="'.$sellerInfo['name'].'"/>';
+                        echo '<td>Umbrella, Water Bottle</td>';
+                        echo '<td><input type="button" class="btn btn-primary" name="btnSubscribe'.($i+1).'" onClick="location=\'sendingmail.php?sID='.$accID['accountID'].'\';" value="Subscribe"/></td>';
+                        echo '</tr>';
+                      }
+                    }
+                    else
+                    {
+                      echo "<tr><td colspan='4' align='center'>There are not seller yet.</td></tr>";
+                    }
+                  ?>
                   <tr><td colspan="6" align="center"><button type="submit" class="btn btn-danger" name="btnBackForward" id="btnBackForward" value="submit">Back</button></td></tr>
                 </tbody>
             </table>
