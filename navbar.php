@@ -67,6 +67,9 @@
 				<li class="nav-item">
 				<a class="nav-link" href="staff.php">Staff</a>
             </li>
+        <li class="nav-item">
+        <a class="nav-link" href="category.php">Category</a>
+            </li>
 				<li class="nav-item">
 				<a class="nav-link" href="product_manage.php">Product</a>
             </li>
