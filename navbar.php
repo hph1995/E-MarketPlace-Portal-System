@@ -24,7 +24,15 @@
   </head>
 
   <body>
-
+<?php 
+	$accountID = mysql_query("SELECT * FROM tblaccount WHERE username = '".$_SESSION['account_login']."'");
+			while ($row = mysql_fetch_array($accountID, MYSQL_ASSOC))
+			{
+				
+				$id = $row['accountID'];
+				$type = $row['accType'];
+			}
+	?>
   <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
@@ -54,9 +62,10 @@
               <a class="nav-link" href="register.php">SignUp</a>
             </li>';
 			}
-			else
+			else if(isset($_SESSION['account_login']) && $type == "ADMINISTRATOR")
 			{
 				echo '
+				
         <li class="nav-item">
         <a class="nav-link" href="seller.php">Seller</a>
             </li>
@@ -69,8 +78,27 @@
             </li>
         <li class="nav-item">
         <a class="nav-link" href="category.php">Category</a>
+				<li class="nav-item">
+				<a class="nav-link" href="#">'.$_SESSION['account_login'].'</a>
             </li>
 				<li class="nav-item">
+				<a class="nav-link" href="logout.php">logout</a>
+            </li>';
+			} else if(isset($_SESSION['account_login']) && $type == "CUSTOMER")
+			{
+				echo '
+				<li class="nav-item">
+        <a class="nav-link" href="seller_form.php">Apply a Seller</a>
+            </li>
+				<li class="nav-item">
+				<a class="nav-link" href="#">'.$_SESSION['account_login'].'</a>
+            </li>
+				<li class="nav-item">
+				<a class="nav-link" href="logout.php">logout</a>
+            </li>';
+			} else if(isset($_SESSION['account_login']) && $type == "SELLER")
+			{
+				echo '
 				<a class="nav-link" href="product_manage.php">Product</a>
             </li>
 				<li class="nav-item">
@@ -78,6 +106,46 @@
             </li>
 				<li class="nav-item">
 				<a class="nav-link" href="logout.php">logout</a>
+            </li>';
+			
+			} else if(isset($_SESSION['account_login']) && $type == "STAFF")
+			{
+				echo '
+				
+        <li class="nav-item">
+        <a class="nav-link" href="seller.php">Seller</a>
+            </li>
+        <li class="nav-item">
+				<li class="nav-item">
+				<a class="nav-link" href="customer.php">Customer</a>
+            </li>
+				
+        <li class="nav-item">
+        <a class="nav-link" href="category.php">Category</a>
+				<li class="nav-item">
+				<a class="nav-link" href="#">'.$_SESSION['account_login'].'</a>
+            </li>
+				<li class="nav-item">
+				<a class="nav-link" href="logout.php">logout</a>
+            </li>';
+			} 
+			else
+			{
+				echo '<li class="nav-item">
+              <a class="nav-link" href="index.php"></a>
+			
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">About</a>
+            </li>
+			<li class="nav-item">
+              <a class="nav-link" href="#">Sell on Deallo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.php">LogIn</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="register.php">SignUp</a>
             </li>';
 			}
 			?>
