@@ -47,11 +47,25 @@
 			{
 			echo '<li class="nav-item">
               <a class="nav-link" href="index.php"></a>
-			
+		
             </li>
+			
+			<li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2">
+            <div class="input-group">
+              <input class="form-control" type="text" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-warning" type="button">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
             <li class="nav-item">
               <a class="nav-link" href="about.html">About</a>
             </li>
+			
 			<li class="nav-item">
               <a class="nav-link" href="#">Sell on Deallo</a>
             </li>
@@ -79,7 +93,7 @@
         <li class="nav-item">
         <a class="nav-link" href="category.php">Category</a>
 				<li class="nav-item">
-				<a class="nav-link" href="#">'.$_SESSION['account_login'].'</a>
+				<a class="nav-link" href="account_profile.php">'.$_SESSION['account_login'].'</a>
             </li>
 				<li class="nav-item">
 				<a class="nav-link" href="logout.php">logout</a>
@@ -88,10 +102,22 @@
 			{
 				echo '
 				<li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2">
+            <div class="input-group">
+              <input class="form-control" type="text" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-warning" type="button">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+				<li class="nav-item">
         <a class="nav-link" href="seller_form.php">Apply a Seller</a>
             </li>
 				<li class="nav-item">
-				<a class="nav-link" href="#">'.$_SESSION['account_login'].'</a>
+				<a class="nav-link" href="account_profile.php">'.$_SESSION['account_login'].'</a>
             </li>
 				<li class="nav-item">
 				<a class="nav-link" href="logout.php">logout</a>
@@ -99,10 +125,22 @@
 			} else if(isset($_SESSION['account_login']) && $type == "SELLER")
 			{
 				echo '
+				<li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2">
+            <div class="input-group">
+              <input class="form-control" type="text" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-warning" type="button">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
 				<a class="nav-link" href="product_manage.php">Product</a>
             </li>
 				<li class="nav-item">
-				<a class="nav-link" href="#">'.$_SESSION['account_login'].'</a>
+				<a class="nav-link" href="account_profile.php">'.$_SESSION['account_login'].'</a>
             </li>
 				<li class="nav-item">
 				<a class="nav-link" href="logout.php">logout</a>
@@ -123,7 +161,7 @@
         <li class="nav-item">
         <a class="nav-link" href="category.php">Category</a>
 				<li class="nav-item">
-				<a class="nav-link" href="#">'.$_SESSION['account_login'].'</a>
+				<a class="nav-link" href="account_profile.php">'.$_SESSION['account_login'].'</a>
             </li>
 				<li class="nav-item">
 				<a class="nav-link" href="logout.php">logout</a>
@@ -133,7 +171,18 @@
 			{
 				echo '<li class="nav-item">
               <a class="nav-link" href="index.php"></a>
-			
+			<li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2">
+            <div class="input-group">
+              <input class="form-control" type="text" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-warning" type="button">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="about.html">About</a>

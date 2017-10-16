@@ -33,13 +33,11 @@ session_start();
     <?php require_once('navbar.php'); ?>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+    <header class="masthead" style="background:#F54700; max-height:80px">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Deallo</h1>
-              <span class="subheading">An official e-commerce site of Deallo Craft House</span>
             </div>
           </div>
         </div>
