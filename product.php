@@ -107,7 +107,6 @@
         $checkSubscribedBuyer = mysql_query($subscribedBuyer, $dbLink);
         if(mysql_num_rows($checkSubscribedBuyer) > 0) $sendEmail = true;
         if($checkAddProduct){
-            echo "<script>alert('Product Information Added');location='';</script>";
             if($sendEmail == true)
             {
                 //send email to subscribed
@@ -136,7 +135,6 @@
         if(mysql_num_rows($checkSubscribedBuyer) > 0) $sendEmail = true;
         if($checkupdateProduct)
         {
-            echo '<script>alert("Product updated successfully.");location="";</script>';
             if($sendEmail == true)
             {
                 //send email to subscribed
@@ -162,7 +160,7 @@
     <?php   
         if($_GET['mode'] == 'view')
         { 
-            $getNumProduct = "SELECT COUNT(productID) AS intProduct FROM tblproduct";
+            $getNumProduct = "SELECT COUNT(productID) AS intProduct FROM tblproduct WHERE status = 'ACTIVE'";
             $checkNum = mysql_query($getNumProduct, $dbLink);
             $numInfo = mysql_fetch_array($checkNum);
             echo '<script type="text/javascript">var countRow = '.$numInfo['intProduct'].';</script>';

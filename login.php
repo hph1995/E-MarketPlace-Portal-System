@@ -33,7 +33,7 @@ session_start();
     <?php include('navbar.php'); ?>
 
     <!-- Page Header -->
-   <header class="masthead" style="background:#F54700; max-height:80px">
+    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
@@ -66,21 +66,28 @@ session_start();
 				$checkGetEmail = mysql_query($getEmail, $dbLink);
 				$result = mysql_fetch_array($checkGetEmail);
 				$_SESSION['account_email'] = strtolower($result['email']);
+        $_SESSION['account_id'] = $account_id;
+        $_SESSION['account_type'] = $acc_type;
 				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'customer_homepage.php';</script>";
 			}
 			else if($acc_type == 'ADMINISTRATOR')
 			{
 				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'admin.php';</script>";
 				$_SESSION['account_login'] = strtoupper($_POST['username']);
+        $_SESSION['account_type'] = $acc_type;
+        $_SESSION['account_id'] = $account_id;
 			}
 			else if($acc_type == 'SELLER')
 			{
-				$_SESSION['account_id'] = $account_id;
+        $_SESSION['account_id'] = $account_id;
+        $_SESSION['account_type'] = $acc_type;
 				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'seller_homepage.php';</script>";
 				$_SESSION['account_login'] = strtoupper($_POST['username']);
 			}
 			else if($acc_type == 'STAFF')
 			{
+        $_SESSION['account_type'] = $acc_type;
+        $_SESSION['account_id'] = $account_id;
 				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'staff_homepage.php';</script>";
 				$_SESSION['account_login'] = strtoupper($_POST['username']);
 			}

@@ -43,25 +43,85 @@
       </div>
     </header>
     <?php
-	$sellerID = mysql_query("SELECT * FROM tblpersonnel RIGHT JOIN tblseller ON tblpersonnel.personnelID = tblseller.personnelID ORDER BY tblseller.personnelID");
-		$count = 1;
-        while ($row = mysql_fetch_array($sellerID, MYSQL_ASSOC))
-		{
-			$string = "btn_change".$count;
-			if($_POST["btn_change$count"])
-			{
-				$update_status = mysql_query("UPDATE tblseller SET 
-			status = 'ACTIVE' WHERE sellerID = '".$row['sellerID']."'");
-			}
-			$count += 1;
-		}
-    if($_POST['btnBackForward'])
-    {
-      echo '<script>location="index.php";</script>';
-    }
-    else
-    {
-    ?>
+  	  $sellerID = mysql_query("SELECT * FROM tblpersonnel RIGHT JOIN tblseller ON tblpersonnel.personnelID = tblseller.personnelID ORDER BY tblseller.personnelID");
+  		$count = 1;
+      while ($row = mysql_fetch_array($sellerID, MYSQL_ASSOC))
+		  {
+  			$string = "btn_change".$count;
+  			if($_POST["btn_change$count"])
+  			{
+  				$update_status = mysql_query("UPDATE tblseller SET 
+  			status = 'ACTIVE' WHERE sellerID = '".$row['sellerID']."'");
+  			}
+  			$count += 1;
+  		}
+      if($_POST['btnBackForward'])
+      {
+        echo '<script>location="index.php";</script>';
+      }
+      else
+      {
+        if($_SESSION['account_type'] == "ADMINISTRATOR" || $_SESSION['account_type'] == "STAFF")
+        {
+      ?>
+          <form id="formProduct" name="formProduct" method="post" style="margin-top: 100px;" action="">
+            <div class="container">
+              <div style="margin: 10px;">
+                  <h2 style="text-align: center;">Seller List</h2><br>       
+                  <table id="productTable" class="table table-hover" style="width: 100%">
+                      <thead>
+                          <tr>
+                            <th>No</th>
+                            <th>Seller Name</th>
+                					  <th>IC</th>
+                					  <th>Email</th>
+                            <th>Bank Account</th>
+                            <th>Status</th>
+      					             <th>Accept Seller</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <?php 
+      				  $sellerID = mysql_query("SELECT * FROM tblpersonnel RIGHT JOIN tblseller ON tblpersonnel.personnelID = tblseller.personnelID ORDER BY tblseller.personnelID");
+      					$count = 0;
+                          if(mysql_num_rows($sellerID) > 0)
+                          {
+                            while ($row = mysql_fetch_array($sellerID, MYSQL_ASSOC))
+      					  {
+      						 $count += 1;
+      						  $id = $row['personnelID'];
+      						  echo "<tr>";
+      						  echo "<td>".$row['sellerID']."</td>";
+      						  echo "<td>".$row['name']."</td>";
+      						   echo "<td>".$row['NRIC']."</td>";
+      						  echo "<td>".$row['email']."</td>";
+      						  echo "<td>".$row['bankAccount']."</td>";
+      						  echo "<td>".$row['status']."</td>";
+      						  echo "<td><button type=\"submit\" class=\"btn btn-danger\" name=\"btn_change$count\" id=\"btn_change\" value=\"submit\">Accept</button></td>";
+      						  echo "</tr>";
+      					
+      						  
+      					  }
+    					  
+                        }
+                        else
+                        {
+                          echo "<tr><td colspan='4' align='center'>There are not seller yet.</td></tr>";
+                        }
+                      ?>
+                      <tr><td colspan="6" align="center"><button type="submit" class="btn btn-danger" name="btnBackForward" id="btnBackForward" value="submit">Back</button></td></tr>
+                    </tbody>
+                </table>
+                <br>
+            </div>
+            </div>
+          </form>
+      <?php
+        }
+        elseif ($_SESSION['account_type'] == "CUSTOMER") {
+          $getSeller = "SELECT * FROM tblaccount WHERE accType = 'SELLER'";
+          $checkGetSeller = mysql_query($getSeller, $dbLink);
+      ?>
     <form id="formProduct" name="formProduct" method="post" style="margin-top: 100px;" action="">
       <div class="container">
         <div style="margin: 10px;">
@@ -71,37 +131,43 @@
                     <tr>
                       <th>No</th>
                       <th>Seller Name</th>
-					  <th>IC</th>
-					  <th>Email</th>
-                      <th>Bank Account</th>
-                      <th>Status</th>
-					  <th>Accept Seller</th>
+                      <th>Product</th>
+                      <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                   <?php 
-				 
-				  $sellerID = mysql_query("SELECT * FROM tblpersonnel RIGHT JOIN tblseller ON tblpersonnel.personnelID = tblseller.personnelID ORDER BY tblseller.personnelID");
-					$count = 0;
-                    if(mysql_num_rows($sellerID) > 0)
+                    if(mysql_num_rows($checkGetSeller) > 0)
                     {
-                      while ($row = mysql_fetch_array($sellerID, MYSQL_ASSOC))
-					  {
-						 $count += 1;
-						  $id = $row['personnelID'];
-						  echo "<tr>";
-						  echo "<td>".$row['sellerID']."</td>";
-						  echo "<td>".$row['name']."</td>";
-						   echo "<td>".$row['NRIC']."</td>";
-						  echo "<td>".$row['email']."</td>";
-						  echo "<td>".$row['bankAccount']."</td>";
-						  echo "<td>".$row['status']."</td>";
-						  echo "<td><button type=\"submit\" class=\"btn btn-danger\" name=\"btn_change$count\" id=\"btn_change\" value=\"submit\">Accept</button></td>";
-						  echo "</tr>";
-					
-						  
-					  }
-					  
+                      for($i = 0; $i < mysql_num_rows($checkGetSeller); $i++)
+                      {
+                        $accID = mysql_fetch_array($checkGetSeller);
+                        $getSellerInfo = "SELECT * FROM tblpersonnel WHERE accountID = ".$accID['accountID']."";
+                        $checkGetSellerInfo = mysql_query($getSellerInfo, $dbLink);
+                        if($checkGetSellerInfo) $sellerInfo = mysql_fetch_array($checkGetSellerInfo);
+                        echo '<tr>';
+                        echo '<td>'.($i+1).'</td>';
+                        echo '<td>'.$sellerInfo['name'].'</td>';
+                        echo '<input type="hidden" id="txtsellername'.($i+1).'" name="txtsellername'.($i+1).'" value="'.$sellerInfo['name'].'"/>';
+                        $getSoldProducts = "SELECT * FROM tblproduct WHERE sellerID = '".$accID['accountID']."' AND status = 'ACTIVE'";
+                        $checkGetSoldProducts = mysql_query($getSoldProducts, $dbLink);
+                        if(mysql_num_rows($checkGetSoldProducts) > 1)
+                        {
+                          for($i = 0; $i < mysql_num_rows($checkGetSoldProducts); $i++)
+                          {
+                            $getResult = mysql_fetch_array($checkGetSoldProducts);
+                            $soldProducts.=$getResult['productName'] + " ";
+                          }
+                        }
+                        else
+                        {
+                          $getResult = mysql_fetch_array($checkGetSoldProducts);
+                          $soldProducts.=$getResult['productName'];
+                        }
+                        echo '<td>'.ucwords(strtolower($soldProducts)).'</td>';
+                        echo '<td><input type="button" class="btn btn-primary" name="btnSubscribe'.($i+1).'" onClick="location=\'sendingmail.php?sID='.$accID['accountID'].'\';" value="Subscribe"/></td>';
+                        echo '</tr>';
+                      }
                     }
                     else
                     {
@@ -115,7 +181,10 @@
         </div>
       </div>
     </form>
-    <?php } ?>
+    <?php
+        }
+      } 
+    ?>
     <hr>
 
     <!-- Footer -->
