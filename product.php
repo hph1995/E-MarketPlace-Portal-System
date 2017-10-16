@@ -60,7 +60,7 @@
             for($i = 0; $i < mysql_num_rows($checkGetCategory); $i++)
             {
                 $categoryInfo = mysql_fetch_array($checkGetCategory);
-                echo '<option value="'.$categoryInfo['catName'].'">'.strtolower(ucwords($categoryInfo['catName'])).'</option>';
+                echo '<option value="'.$categoryInfo['catName'].'">'.ucwords(strtolower($categoryInfo['catName'])).'</option>';
             }
         } 
         echo "</select>';";?>
