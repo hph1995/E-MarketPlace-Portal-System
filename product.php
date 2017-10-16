@@ -100,27 +100,48 @@
     <?php
     if($_POST['btnSubmitProduct'])
     {
-        $addProduct = 'INSERT INTO tblproduct (productName, category, description, placeManufacture) VALUES("'.strtoupper(trim($_POST['txtproName'])).'", "'.strtoupper(trim($_POST['selCategory'])).'", "'.strtoupper(trim($_POST['txtDescr'])).'", "'.strtoupper(trim($_POST['txtPlaceManufacture'])).'")';
+        $sendEmail = false;
+        $addProduct = 'INSERT INTO tblproduct (productName, category, description, placeManufacture, sellerID, status) VALUES("'.strtoupper(trim($_POST['txtproName'])).'", "'.strtoupper(trim($_POST['selCategory'])).'", "'.strtoupper(trim($_POST['txtDescr'])).'", "'.strtoupper(trim($_POST['txtPlaceManufacture'])).'", "'.$_SESSION['account_id'].'", "ACTIVE")';
         $checkAddProduct = mysql_query($addProduct, $dbLink);
+        $subscribedBuyer = "SELECT * FROM tblsubscribe WHERE sellerID = '".$_SESSION['account_id']."'";
+        $checkSubscribedBuyer = mysql_query($subscribedBuyer, $dbLink);
+        if(mysql_num_rows($checkSubscribedBuyer) > 0) $sendEmail = true;
         if($checkAddProduct){
             echo "<script>alert('Product Information Added');location='';</script>";
-        }
+            if($sendEmail == true)
+            {
+                //send email to subscribed
+                $getProductID = "SELECT COUNT(productID) as intPID FROM tblproduct";
+                $checkGetProductID = mysql_query($getProductID, $dbLink);
+                $numPID = mysql_fetch_array($checkGetProductID);
+                echo "<script>location='sendingmail.php?addPID=".$numPID['intPID']."';</script>";
+            }
+         }
         else{
             echo "<script>alert('Fail to add product!!');window.history.go(-1);</script>";
         }
     }
     else if ($_POST['btnDelProduct']) {
-        $delProduct = "DELETE FROM tblproduct WHERE productID = ".$_POST['btnDelProduct']."";
+        $delProduct = "UPDATE tblproduct SET status = 'INACTIVE' WHERE productID = ".$_POST['btnDelProduct']."";
         $checkDelProduct = mysql_query($delProduct, $dbLink);
         if($checkDelProduct) echo "<script>location='';</script>";
     }
     else if($_POST['btnSaveProduct'])
     {
+        $sendEmail = false;
         $updateProduct = "UPDATE tblproduct SET productName = '".strtoupper(trim($_POST['txtProductName']))."', category = '".strtoupper(trim($_POST['sCategory']))."', description = '".strtoupper(trim($_POST['txtDescr']))."', placeManufacture = '".strtoupper(trim($_POST['txtPManufature']))."' WHERE productID = ".$_POST['btnSaveProduct']."";
         $checkupdateProduct = mysql_query($updateProduct, $dbLink);
+        $subscribedBuyer = "SELECT * FROM tblsubscribe WHERE sellerID = '".$_SESSION['account_id']."'";
+        $checkSubscribedBuyer = mysql_query($subscribedBuyer, $dbLink);
+        if(mysql_num_rows($checkSubscribedBuyer) > 0) $sendEmail = true;
         if($checkupdateProduct)
         {
             echo '<script>alert("Product updated successfully.");location="";</script>';
+            if($sendEmail == true)
+            {
+                //send email to subscribed
+                echo "<script>location='sendingmail.php?updatePID=".$_POST['btnSaveProduct']."';</script>";
+            }
         }
     }
     else if($_POST['btnBack'])
@@ -146,7 +167,7 @@
             $numInfo = mysql_fetch_array($checkNum);
             echo '<script type="text/javascript">var countRow = '.$numInfo['intProduct'].';</script>';
 
-            $getAllProduct = "SELECT * FROM tblproduct";
+            $getAllProduct = "SELECT * FROM tblproduct WHERE status = 'ACTIVE'";
             $checkGetAllProduct = mysql_query($getAllProduct, $dbLink);
             ?>
             <div style="margin: 10px;">
