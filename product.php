@@ -1,6 +1,7 @@
 <?php
 	session_cache_limiter('private, must-revalidate');
 	session_start();
+    include('dbEMarketplace.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,10 +53,16 @@
         newCell = row.insertCell(2);
         <?php 
         echo "newCell.innerHTML = '<select name=\'sCategory\'>";
-        echo '<option value="CLOTHING">Clothing</option>';
-        echo '<option value="ELECTRONIC">Electronic</option>';
-        echo '<option value="SPORT">Sport</option>';
-        echo '<option value="TRAVEL">Travel</option>';
+        $getCategory = "SELECT * FROM tblcategory";
+        $checkGetCategory = mysql_query($getCategory, $dbLink);
+        if($checkGetCategory)
+        {
+            for($i = 0; $i < mysql_num_rows($checkGetCategory); $i++)
+            {
+                $categoryInfo = mysql_fetch_array($checkGetCategory);
+                echo '<option value="'.$categoryInfo['catName'].'">'.strtolower(ucwords($categoryInfo['catName'])).'</option>';
+            }
+        } 
         echo "</select>';";?>
         newCell = row.deleteCell(3);
         newCell = row.insertCell(3);
@@ -73,9 +80,6 @@
 
 </script>
 </head>
-    <?php 
-        include('dbEMarketplace.php');
-    ?>
 <body>
     <!-- Navigation -->
     <?php include('navbar.php'); ?>
@@ -213,10 +217,19 @@
                         <div class="form-group floating-label-form-group controls"">
                             <label>Category</label>
                             <select class="form-control" id="selCategory" name="selCategory">
-                                <option value="CLOTHING" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "CLOTHINGS") echo 'selected';}?>>Clothing</option>
-                                <option value="ELECTRONIC" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "ELECTRONIC") echo 'selected';}?>>Electronic</option>
-                                <option value="SPORT" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "SPORT") echo 'selected';}?>>Sport</option>
-                                <option value="TRAVEL" <?php if($_GET['mode'] == 'view'){if($proInfo['category'] == "TRAVEL") echo 'selected';}?>>Travel</option>
+                                <?php
+                                $getCategory = "SELECT * FROM tblcategory";
+                                $checkGetCategory = mysql_query($getCategory, $dbLink);
+                                if($checkGetCategory)
+                                {
+                                    for($i = 0; $i < mysql_num_rows($checkGetCategory); $i++)
+                                    {
+                                        $categoryInfo = mysql_fetch_array($checkGetCategory);
+                                        echo $categoryInfo['catName'];
+                                        echo '<option value="'.$categoryInfo['catName'].'">'.ucwords(strtolower($categoryInfo['catName'])).'</option>';
+                                    }
+                                } 
+                                ?>
                             </select>
                         </div>
                     </div>
