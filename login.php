@@ -53,7 +53,7 @@ session_start();
 		$account_SQL_result = mysql_query($account_SQL,$dbLink);
 		while ($row = mysql_fetch_array($account_SQL_result, MYSQL_ASSOC))
 		{
-    	$account_id =  $row['accountID'];
+			$account_id =  $row['accountID'];
 			$acc_type = $row['accType'];
 		}
 		if(mysql_num_rows($account_SQL_result) > 0)
@@ -62,20 +62,25 @@ session_start();
 			if($acc_type == 'CUSTOMER')
 			{
 				$_SESSION['account_login'] = strtoupper($_POST['username']);
-        $getEmail = "SELECT email FROM tblpersonnel WHERE accountID = '".$account_id."'";
-        $checkGetEmail = mysql_query($getEmail, $dbLink);
-        $result = mysql_fetch_array($checkGetEmail);
-        $_SESSION['account_email'] = strtolower($result['email']);
-        echo "<script>alert('Correct. you are customer.');location = 'login.php';</script>";
+				$getEmail = "SELECT email FROM tblpersonnel WHERE accountID = '".$account_id."'";
+				$checkGetEmail = mysql_query($getEmail, $dbLink);
+				$result = mysql_fetch_array($checkGetEmail);
+				$_SESSION['account_email'] = strtolower($result['email']);
+				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'customer_homepage.php';</script>";
 			}
 			else if($acc_type == 'ADMINISTRATOR')
 			{
-				echo "<script>alert('Correct. you are admin');location = 'admin.php';</script>";
+				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'admin.php';</script>";
 				$_SESSION['account_login'] = strtoupper($_POST['username']);
 			}
-			else
+			else if($acc_type == 'SELLER')
 			{
-				echo "<script>alert('Correct. you are staff');location = '#';</script>";
+				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'seller_homepage.php';</script>";
+				$_SESSION['account_login'] = strtoupper($_POST['username']);
+			}
+			else if($acc_type == 'STAFF')
+			{
+				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'staff_homepage.php';</script>";
 				$_SESSION['account_login'] = strtoupper($_POST['username']);
 			}
 		}
