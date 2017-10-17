@@ -160,12 +160,12 @@
     <?php   
         if($_GET['mode'] == 'view')
         { 
-            $getNumProduct = "SELECT COUNT(productID) AS intProduct FROM tblproduct WHERE status = 'ACTIVE'";
+            $getNumProduct = "SELECT COUNT(productID) AS intProduct FROM tblproduct WHERE status = 'ACTIVE' AND sellerID = '".$_SESSION['account_id']."'";
             $checkNum = mysql_query($getNumProduct, $dbLink);
             $numInfo = mysql_fetch_array($checkNum);
             echo '<script type="text/javascript">var countRow = '.$numInfo['intProduct'].';</script>';
 
-            $getAllProduct = "SELECT * FROM tblproduct WHERE status = 'ACTIVE'";
+            $getAllProduct = "SELECT * FROM tblproduct WHERE status = 'ACTIVE' AND sellerID = '".$_SESSION['account_id']."'";
             $checkGetAllProduct = mysql_query($getAllProduct, $dbLink);
             ?>
             <div style="margin: 10px;">

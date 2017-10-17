@@ -141,6 +141,7 @@
                     {
                       for($i = 0; $i < mysql_num_rows($checkGetSeller); $i++)
                       {
+                        $soldProducts = "";
                         $accID = mysql_fetch_array($checkGetSeller);
                         $getSellerInfo = "SELECT * FROM tblpersonnel WHERE accountID = ".$accID['accountID']."";
                         $checkGetSellerInfo = mysql_query($getSellerInfo, $dbLink);

@@ -136,7 +136,7 @@ session_start();
           echo("<p>" . $mail->getMessage() . "</p>");
         }
         else {
-          echo "<script> alert('Product updated successfully'); location='product.php';</script>"; 
+          echo "<script> alert('Product updated successfully'); location='product.php?mode=view';</script>"; 
         }
     }
 
