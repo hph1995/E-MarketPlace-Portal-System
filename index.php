@@ -52,26 +52,17 @@ session_start();
             <h2 class="post-title">
               Product Categories
             </h2>
-			<a href="product_display.php?mode=clothing">
-              <h3 class="post-subtitle">
-                Clothing
-              </h3>
-			</a>
-			<a href="product_display.php?mode=electronic">
-			  <h3 class="post-subtitle">
-                Electronic
-              </h3>
-			</a>
-			<a href="product_display.php?mode=sport">
-			  <h3 class="post-subtitle">
-                Sport
-              </h3>
-			</a>
-			<a href="product_display.php?mode=travel">
-			  <h3 class="post-subtitle">
-                Travel
-              </h3>
-			</a>
+			<?php
+			$category = mysql_query("SELECT * FROM tblcategory");
+			while($row = mysql_fetch_array($category, MYSQL_ASSOC))
+			{
+				echo "<a href=\"product_display.php?mode=".$row['catName']."\">
+              <h3 class=\"post-subtitle\">";
+			  echo $row['catName'];
+			  echo '</h3></a>';
+				
+			}
+			?>
             
           </div>
           <hr>

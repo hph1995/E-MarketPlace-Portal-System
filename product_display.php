@@ -64,15 +64,15 @@
         $checkNum = mysql_query($getNumProduct, $dbLink);
         $numInfo = mysql_fetch_array($checkNum);
 
-        $getAllClothing = "SELECT * FROM tblproduct WHERE category = 'CLOTHING'";
-		$getAllElectronic = "SELECT * FROM tblproduct WHERE category = 'ELECTRONIC'";
+        $getAllClothing = "SELECT * FROM tblproduct WHERE category = '".$_GET['mode']."'";
+		/*$getAllElectronic = "SELECT * FROM tblproduct WHERE category = 'ELECTRONIC'";
 		$getAllSport = "SELECT * FROM tblproduct WHERE category = 'SPORT'";
-		$getAllTravel = "SELECT * FROM tblproduct WHERE category = 'TRAVEL'";
+		$getAllTravel = "SELECT * FROM tblproduct WHERE category = 'TRAVEL'";*/
 		
         $checkGetAllClothing = mysql_query($getAllClothing, $dbLink);
-		$checkGetAllElectronic = mysql_query($getAllElectronic, $dbLink);
+		/*$checkGetAllElectronic = mysql_query($getAllElectronic, $dbLink);
 		$checkGetAllSport = mysql_query($getAllSport, $dbLink);
-		$checkGetAllTravel = mysql_query($getAllTravel, $dbLink);
+		$checkGetAllTravel = mysql_query($getAllTravel, $dbLink);*/
         ?>
     
             <div style="margin: 10px;">  
@@ -88,7 +88,7 @@
                     </thead>
                     <tbody>
                         <?php				
-							if($_GET['mode'] == 'clothing')	{
+							//if($_GET['mode'] == 'clothing')	{
 								if(mysql_num_rows($checkGetAllClothing) > 0)
 								{
 									for($i = 0; $i < mysql_num_rows($checkGetAllClothing); $i++)
@@ -103,7 +103,7 @@
 										echo '</tr>';
 									}
 								}
-							}
+							/*}
 							else if($_GET['mode'] == 'electronic') {
 								if(mysql_num_rows($checkGetAllElectronic) > 0)
 								{
@@ -151,7 +151,7 @@
 										echo '</tr>';
 									}
 								}
-							}	
+							}	*/
 							?>
                     </tbody>
                 </table>
