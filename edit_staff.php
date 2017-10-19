@@ -33,13 +33,11 @@ session_start();
     <?php include('navbar.php'); ?>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+     <header class="masthead" style="background:#F54700; max-height:80px">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Edit Staff</h1>
-              <span class="subheading">Edit staff account</span>
             </div>
           </div>
         </div>
@@ -97,6 +95,15 @@ session_start();
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
+		<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Staff Management
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><a href="add_staff.php">Add</a></li>
+    <li><a href="edit_staff.php">Edit</a></li>
+    <li><a href="delete_staff.php">Delete</a></li>
+  </ul>
+</div>
           <p>Please fill in all information to edit your account</p>
           
           <form name="sentMessage" id="contactForm" method="post">

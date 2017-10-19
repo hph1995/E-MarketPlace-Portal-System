@@ -2,12 +2,22 @@
 	session_cache_limiter('private, must-revalidate');
 	session_start();
     include('dbEMarketplace.php');
+	//check if the directory not exists, then create directory
+	$filename = 'product picture'; // directory
+	if (file_exists($filename)){
+	} else {
+	mkdir("product picture");
+	$myfile = fopen("product picture/product_picture_name.txt", "w") or die("Unable to open file!");
+	fwrite($myfile,"");
+	fclose($myfile);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="description" content="">
 <meta name="author" content="">
 <title>E-Market Portal</title>
@@ -85,13 +95,11 @@
     <?php include('navbar.php'); ?>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+     <header class="masthead" style="background:#F54700; max-height:80px">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Product Information</h1>
-              <span class="subheading">Sign in with your Deallo Account</span>
             </div>
           </div>
         </div>
@@ -100,6 +108,67 @@
     <?php
     if($_POST['btnSubmitProduct'])
     {
+		//upload picture
+			$target_dir = "product picture/";
+			$target_file = $target_dir . basename($_FILES["product_pic"]["name"]);
+			$uploadOk = 1;
+			$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+			// Check if image file is a actual image or fake image
+			if(isset($_POST["btnSubmitProduct"])) {
+   			$check = getimagesize($_FILES["product_pic"]["tmp_name"]);
+    		if($check !== false) 
+			{
+      		  	$uploadOk = 1;
+    		} 
+			else 
+			{
+        		$uploadOk = 0;
+  		 	}
+		}
+			// Check file size
+			if ($_FILES["product_pic"]["size"] > 900000)
+			{
+   				 $uploadOk = 0;
+			}
+			// Allow certain file formats
+			if($imageFileType != "jpg" && $imageFileType != "png" && 					$imageFileType != "jpeg" && $imageFileType != "gif" && $imageFileType != "JPG" && $imageFileType != "PNG" && $imageFileType != "JPEG" && $imageFileType != "GIF") {
+    		$uploadOk = 0;
+			}
+			//change the picture name when upload
+			$last_id = mysql_query("SELECT productID FROM `tblproduct` ORDER BY productID DESC LIMIT 1");
+			$id = 0;
+			if(mysql_num_rows($last_id) > 0)
+			{
+				while ($row = mysql_fetch_array($last_id, MYSQL_ASSOC))
+				{
+					$id = $row['productID'] + 1;	
+				}
+			}
+			else
+			{
+				$id = 1;
+			}
+			$_FILES["product_pic"]["name"] = $id.".".$imageFileType;
+$target_file = $target_dir . basename($_FILES["product_pic"]["name"]); //file
+$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); //get the file extension
+			// Check if $uploadOk is set to 0 by an error
+			if ($uploadOk == 0)
+			{
+			}
+			else 
+			{
+    			if (move_uploaded_file($_FILES["product_pic"]["tmp_name"], $target_file))
+				{
+					//write the picture name into logo_name.txt
+					$myfile = fopen("product picture/product_picture_name.txt", "a"); // "a" can allow write new data into text file without delete existing data
+					$newline = "\r\n"; // write new data into text file with newline
+					fwrite($myfile,$_FILES["product_pic"]["name"].$newline);
+					fclose($myfile);
+    			} 
+				else 
+				{
+    			}
+			}
         $sendEmail = false;
         $addProduct = 'INSERT INTO tblproduct (productName, category, description, placeManufacture, sellerID, status) VALUES("'.strtoupper(trim($_POST['txtproName'])).'", "'.strtoupper(trim($_POST['selCategory'])).'", "'.strtoupper(trim($_POST['txtDescr'])).'", "'.strtoupper(trim($_POST['txtPlaceManufacture'])).'", "'.$_SESSION['account_id'].'", "ACTIVE")';
         $checkAddProduct = mysql_query($addProduct, $dbLink);
@@ -156,7 +225,7 @@
     }
     else
     { ?>
-    <form id="formProduct" name="formProduct" method="post" style="margin-top: 100px;" action="">
+    <form id="formProduct" name="formProduct" method="post" style="margin-top: 100px;" action="" enctype="multipart/form-data">
     <?php   
         if($_GET['mode'] == 'view')
         { 
@@ -178,11 +247,27 @@
                           <th>Category</th>
                           <th>Description</th>
                           <th>Place Manufacture</th>
+						  <th align="center">Change Product Picture</th>
                           <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
+						//take out all picture name from staff_picture_name.txt and store each of name into array
+$file="product picture/product_picture_name.txt";
+$page = join("",file("$file")); //Converts the array to a string. Join is an alias for implode. It takes each piece of the array, and glues them together, using the first argument as "glue."
+$picture_name = explode("\n", $page);
+$picture_type_array = array("gif","png","jpg","jpeg","GIF","PNG","JPG","JPEG"); //all image type available
+for($i=0;$i<count($picture_name);$i++)
+{
+	for($k=0;$k<count($picture_type_array);$k++)
+	{
+		if(trim(strtolower($username)).".".$picture_type_array[$k] == trim(strtolower($picture_name[$i])))
+		{
+			$picture_name = $picture_name[$i];
+		}
+	}
+}
                         if(mysql_num_rows($checkGetAllProduct) > 0)
                         {
                             for($i = 0; $i < mysql_num_rows($checkGetAllProduct); $i++)
@@ -194,6 +279,8 @@
                                 echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
                                 echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';
                                 echo '<td>'.ucwords(strtolower($allProduct['placeManufacture'])).'</td>';
+								echo "<td><a href=\"sdfsafasd\"><img src=\"product picture/$picture_name[$i]\" class=\"img-responsive img-thumbnail\" alt=\"Responsive image\" style=\"max-width:80px\"></a></td>";
+								
                                 echo '<td><button type="button" id="btnEditProduct'.($i+1).'" name="btnEditProduct" title="Edit" onClick="editRow('.($i+1).', \''.ucwords(strtolower($allProduct['productID'])).'\', \''.ucwords(strtolower($allProduct['productName'])).'\', \''.ucwords(strtolower($allProduct['category'])).'\', \''.ucwords(strtolower($allProduct['description'])).'\', \''.ucwords(strtolower($allProduct['placeManufacture'])).'\');" style="border: 0; background: transparent; cursor:pointer;" value="'.$stockInfo['drugID'].'" ><img src="img/edit.png" width="20" height="20" alt="submit" /></button>
                                 <button onclick="if(confirm(\'Are you sure want to delete?\') == true ){ return true; } else { return false;}" type="submit" id="btnDelProduct'.($i+1).'" name="btnDelProduct" title="Delete" style="border: 0; background: transparent; margin-left:5px; cursor:pointer;" value="'.$allProduct['productID'].'"><img src="img/remove.png" width="20" height="20" alt="delete" /></button></td>';
                                 echo '</tr>';
@@ -226,16 +313,22 @@
   </ul>
 </div>
                     <p>Please fill in all information</p>
+					<div class="control-group">
+                        <div class="form-group floating-label-form-group controls">
+                            <h6>Upload Product Picture</h6>
+                            <input type="file" name="product_pic" id="product_pic" class="form-control" style="width:250px;" required/>
+                        </div>
+                    </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
                             <label>Product Name</label>
-                            <input type="text" class="form-control" id="txtproName" name="txtproName" placeholder="Enter product name" value="<?php if($_GET['mode'] == 'view') echo $proInfo['productName'];?>">
+                            <input type="text" class="form-control" id="txtproName" name="txtproName" placeholder="Enter product name" value="<?php if($_GET['mode'] == 'view') echo $proInfo['productName'];?>" required>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls"">
                             <label>Category</label>
-                            <select class="form-control" id="selCategory" name="selCategory">
+                            <select class="form-control" id="selCategory" name="selCategory" required>
                                 <?php
                                 $getCategory = "SELECT * FROM tblcategory";
                                 $checkGetCategory = mysql_query($getCategory, $dbLink);
@@ -255,13 +348,13 @@
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls"">
                             <label>Description</label>
-                            <textarea class="form-control" id="txtDescr" name="txtDescr" rows="3" placeholder="Enter product description"><?php if($_GET['mode'] == 'view') echo $proInfo['description']; ?></textarea>
+                            <textarea class="form-control" id="txtDescr" name="txtDescr" rows="3" placeholder="Enter product description" required><?php if($_GET['mode'] == 'view') echo $proInfo['description']; ?></textarea>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls"">
                             <label>Place of Manufacture</label>
-                            <input type="text" class="form-control" id="txtPlaceManufacture" name="txtPlaceManufacture" placeholder="Enter place manufacture" value="<?php if($_GET['mode'] == 'view') echo $proInfo['placeManufacture'];?>">
+                            <input type="text" class="form-control" id="txtPlaceManufacture" name="txtPlaceManufacture" placeholder="Enter place manufacture" value="<?php if($_GET['mode'] == 'view') echo $proInfo['placeManufacture'];?>" required>
                         </div>
                     </div>
                     <br>

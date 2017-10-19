@@ -32,7 +32,6 @@ session_start();
 	$accountID = mysql_query("SELECT accountID FROM tblaccount WHERE username = '".$_SESSION['account_login']."'");
 			while ($row = mysql_fetch_array($accountID, MYSQL_ASSOC))
 			{
-				
 				$id = $row['accountID'];
 			}
 			$personnelID = mysql_query("SELECT * FROM tblpersonnel WHERE accountID = $id");
@@ -48,13 +47,11 @@ session_start();
     <?php include('navbar.php'); ?>
 	
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+     <header class="masthead" style="background:#F54700; max-height:80px">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Staff Management</h1>
-              <span class="subheading"></span>
             </div>
           </div>
         </div>

@@ -33,13 +33,11 @@ session_start();
     <?php include('navbar.php'); ?>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+     <header class="masthead" style="background:#F54700; max-height:80px">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Delete Account</h1>
-              <span class="subheading">Delete Staff Account</span>
             </div>
           </div>
         </div>
@@ -85,6 +83,14 @@ session_start();
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
+		<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Customer Management
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><a href="edit_customer.php">Edit</a></li>
+    <li><a href="delete_customer.php">Delete</a></li>
+  </ul>
+</div>
           <p>Please fill in all information to register your account</p>
           
           <form name="sentMessage" id="contactForm" method="post">

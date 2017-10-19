@@ -137,6 +137,7 @@
             </div>
           </form>
         </li>
+		<li class="nav-item">
 				<a class="nav-link" href="product_manage.php">Product</a>
             </li>
 				<li class="nav-item">

@@ -105,12 +105,11 @@
     <?php include('navbar.php'); ?>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+     <header class="masthead" style="background:#F54700; max-height:80px">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              
             </div>
           </div>
         </div>
