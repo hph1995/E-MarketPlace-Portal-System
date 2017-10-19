@@ -98,7 +98,7 @@
      <header class="masthead" style="background:#F54700; max-height:80px">
       <div class="container">
         <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="">
             <div class="site-heading">
             </div>
           </div>
@@ -279,7 +279,7 @@ for($i=0;$i<count($picture_name);$i++)
                                 echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
                                 echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';
                                 echo '<td>'.ucwords(strtolower($allProduct['placeManufacture'])).'</td>';
-								echo "<td><a href=\"sdfsafasd\"><img src=\"product picture/$picture_name[$i]\" class=\"img-responsive img-thumbnail\" alt=\"Responsive image\" style=\"max-width:80px\"></a></td>";
+								echo "<td><a href=\"edit_product_pic.php?id=$picture_name[$i]\"><img src=\"product picture/$picture_name[$i]\" class=\"img-responsive img-thumbnail\" alt=\"Responsive image\" style=\"max-width:80px\"></a></td>";
 								
                                 echo '<td><button type="button" id="btnEditProduct'.($i+1).'" name="btnEditProduct" title="Edit" onClick="editRow('.($i+1).', \''.ucwords(strtolower($allProduct['productID'])).'\', \''.ucwords(strtolower($allProduct['productName'])).'\', \''.ucwords(strtolower($allProduct['category'])).'\', \''.ucwords(strtolower($allProduct['description'])).'\', \''.ucwords(strtolower($allProduct['placeManufacture'])).'\');" style="border: 0; background: transparent; cursor:pointer;" value="'.$stockInfo['drugID'].'" ><img src="img/edit.png" width="20" height="20" alt="submit" /></button>
                                 <button onclick="if(confirm(\'Are you sure want to delete?\') == true ){ return true; } else { return false;}" type="submit" id="btnDelProduct'.($i+1).'" name="btnDelProduct" title="Delete" style="border: 0; background: transparent; margin-left:5px; cursor:pointer;" value="'.$allProduct['productID'].'"><img src="img/remove.png" width="20" height="20" alt="delete" /></button></td>';
