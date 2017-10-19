@@ -49,15 +49,30 @@ session_start();
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">
-                Product Categories
-              </h2>
+            <h2 class="post-title">
+              Product Categories
+            </h2>
+			<a href="product_display.php?mode=clothing">
               <h3 class="post-subtitle">
-                ......
+                Clothing
               </h3>
-            </a>
-           
+			</a>
+			<a href="product_display.php?mode=electronic">
+			  <h3 class="post-subtitle">
+                Electronic
+              </h3>
+			</a>
+			<a href="product_display.php?mode=sport">
+			  <h3 class="post-subtitle">
+                Sport
+              </h3>
+			</a>
+			<a href="product_display.php?mode=travel">
+			  <h3 class="post-subtitle">
+                Travel
+              </h3>
+			</a>
+            
           </div>
           <hr>
           <div class="post-preview">
