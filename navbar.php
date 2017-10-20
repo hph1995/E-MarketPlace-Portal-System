@@ -113,6 +113,9 @@
             </div>
           </form>
         </li>
+        <li class="nav-item">
+        <a class="nav-link" href="seller.php">Subscribe Seller</a>
+            </li>
 				<li class="nav-item">
         <a class="nav-link" href="seller_form.php">Apply a Seller</a>
             </li>

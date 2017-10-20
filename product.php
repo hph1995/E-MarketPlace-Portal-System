@@ -184,6 +184,9 @@ $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); //get the file exten
                 $numPID = mysql_fetch_array($checkGetProductID);
                 echo "<script>location='sendingmail.php?addPID=".$numPID['intPID']."';</script>";
             }
+            else{
+                echo "<script>location='product.php';</script>";
+            }
          }
         else{
             echo "<script>alert('Fail to add product!!');window.history.go(-1);</script>";
@@ -288,9 +291,9 @@ for($i=0;$i<count($picture_name);$i++)
                         }
                         else
                         {
-                            echo '<tr><td colspan="6" align="center">There are no product can be shown.</td></tr>';
+                            echo '<tr><td colspan="7" align="center">There are no product can be shown.</td></tr>';
                         }
-                        echo '<tr><td colspan="6" align="center"><button type="submit" class="btn btn-danger" name="btnBackForward" id="btnBackForward" value="submit">Back</button></td></tr>';
+                        echo '<tr><td colspan="7" align="center"><button type="submit" class="btn btn-danger" name="btnBackForward" id="btnBackForward" value="submit">Back</button></td></tr>';
                         ?>
                     </tbody>
                 </table>

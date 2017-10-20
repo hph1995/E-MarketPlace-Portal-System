@@ -75,7 +75,7 @@ session_start();
 			
 			if($seller_SQL_result)
 			{
-				echo "<script>alert('Seller Applied!');location = 'seller.php';</script>";
+				echo "<script>alert('Seller Applied!');location = 'customer_homepage.php';</script>";
 			}
 			}
 	}

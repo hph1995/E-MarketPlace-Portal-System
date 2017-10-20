@@ -107,10 +107,10 @@
                         }
                         else
                         {
-                          echo "<tr><td colspan='4' align='center'>There are not seller yet.</td></tr>";
+                          echo "<tr><td colspan='7' align='center'>There are not seller yet.</td></tr>";
                         }
                       ?>
-                      <tr><td colspan="6" align="center"><button type="submit" class="btn btn-danger" name="btnBackForward" id="btnBackForward" value="submit">Back</button></td></tr>
+                      <tr><td colspan="7" align="center"><button type="submit" class="btn btn-danger" name="btnBackForward" id="btnBackForward" value="submit">Back</button></td></tr>
                     </tbody>
                 </table>
                 <br>
