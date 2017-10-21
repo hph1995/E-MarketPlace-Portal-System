@@ -34,7 +34,7 @@
      <header class="masthead" style="background:#F54700; max-height:80px">
       <div class="container">
         <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="">
             <div class="site-heading">
             </div>
           </div>
@@ -155,10 +155,12 @@
                         $checkGetSoldProducts = mysql_query($getSoldProducts, $dbLink);
                         if(mysql_num_rows($checkGetSoldProducts) > 1)
                         {
+                          $totalPro = mysql_num_rows($checkGetSoldProducts);
                           for($i = 0; $i < mysql_num_rows($checkGetSoldProducts); $i++)
                           {
+                            //echo mysql_num_rows($checkGetSoldProducts);
                             $getResult = mysql_fetch_array($checkGetSoldProducts);
-                            $soldProducts.=$getResult['productName'] + " ";
+                            $soldProducts.=$getResult['productName']." ";
                           }
                         }
                         else

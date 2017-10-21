@@ -41,7 +41,6 @@
         </div>
       </div>
     </header>
-    ?>
     <form id="formProduct" name="formProduct" method="post" style="margin-top: 100px;" action="">
       <div class="container">
         <div style="margin: 10px;">     
