@@ -61,7 +61,7 @@
         newCell.setAttribute("align", "center");
         newCell.innerHTML = num;    
         newCell = row.insertCell(1);
-        newCell.innerHTML = '<input type="text" name="txtcatname" id="txtcatname" placeholder="  Drug Name" style="width:100%;" autofocus required="required" />';
+        newCell.innerHTML = '<input type="text" name="txtcatname" id="txtcatname" placeholder="  Category Name" style="width:100%;" autofocus required="required" />';
         add.setAttribute("value", "#");
         cancel.setAttribute("name", "btnCAddCategory");
         
