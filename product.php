@@ -95,7 +95,7 @@
         newCell = row.insertCell(5);
         newCell.innerHTML = '<input type="file" name="product_pic" id="product_pic" class="form-control" style="width:250px;" required/>';
         add.setAttribute("value", "#");
-        cancel.setAttribute("name", "btnCAddCategory");
+        cancel.setAttribute("name", "btnCAddProduct");
         
         document.getElementById(divName).appendChild(add);
         document.getElementById(divName).appendChild(cancel);
@@ -176,16 +176,16 @@
 			$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
 			// Check if image file is a actual image or fake image
 			if(isset($_POST["btnSubmitProduct"])) {
-   			$check = getimagesize($_FILES["product_pic"]["tmp_name"]);
-    		if($check !== false) 
-			{
-      		  	$uploadOk = 1;
-    		} 
-			else 
-			{
-        		$uploadOk = 0;
-  		 	}
-		}
+       			$check = getimagesize($_FILES["product_pic"]["tmp_name"]);
+        		if($check !== false) 
+    			{
+          		  	$uploadOk = 1;
+        		} 
+    			else 
+    			{
+            		$uploadOk = 0;
+      		 	}
+		    }
 			// Check file size
 			if ($_FILES["product_pic"]["size"] > 900000)
 			{
@@ -233,10 +233,22 @@ $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); //get the file exten
         $sendEmail = false;
         $addProduct = 'INSERT INTO tblproduct (productName, category, description, placeManufacture, sellerID, status) VALUES("'.strtoupper(trim($_POST['txtproName'])).'", "'.strtoupper(trim($_POST['sCategory'])).'", "'.strtoupper(trim($_POST['txtDescr'])).'", "'.strtoupper(trim($_POST['txtPlaceManufacture'])).'", "'.$_SESSION['account_id'].'", "ACTIVE")';
         $checkAddProduct = mysql_query($addProduct, $dbLink);
+
+        $getProductID = 'SELECT COUNT(productID) as intProdutID FROM tblproduct';
+        $checkGetProductID = mysql_query($getProductID, $dbLink);
+        if($checkGetProductID) $tempProID = mysql_fetch_array($checkGetProductID);
+
+        $setPrice = 'INSERT INTO tblsellingprice (productID, sellerID, sellingPrice, status) VALUES("'.strtoupper(trim($tempProID['intProdutID'])).'", "'.$_SESSION['account_id'].'", 0, "ACTIVE")';
+        $checkSetPrice = mysql_query($setPrice, $dbLink);
+
+        $setQuantity = 'INSERT INTO tblstockcontrol (productID, sellerID, quantity, status) VALUES("'.strtoupper(trim($tempProID['intProdutID'])).'", "'.$_SESSION['account_id'].'", 0, "ACTIVE")';
+        $checkSetQuantity = mysql_query($setQuantity, $dbLink);
+
+
         $subscribedBuyer = "SELECT * FROM tblsubscribe WHERE sellerID = '".$_SESSION['account_id']."'";
         $checkSubscribedBuyer = mysql_query($subscribedBuyer, $dbLink);
         if(mysql_num_rows($checkSubscribedBuyer) > 0) $sendEmail = true;
-        if($checkAddProduct){
+        if($checkAddProduct && $checkSetPrice && $checkSetQuantity){
             if($sendEmail == true)
             {
                 //send email to subscribed
@@ -256,7 +268,14 @@ $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); //get the file exten
     else if ($_POST['btnDelProduct']) {
         $delProduct = "UPDATE tblproduct SET status = 'INACTIVE' WHERE productID = ".$_POST['btnDelProduct']."";
         $checkDelProduct = mysql_query($delProduct, $dbLink);
-        if($checkDelProduct) echo "<script>location='';</script>";
+
+        $delPrice = "UPDATE tblsellingprice SET status = 'INACTIVE' WHERE productID = ".$_POST['btnDelProduct']."";
+        $checkDelPrice = mysql_query($delPrice, $dbLink);
+
+        $delQuantity = "UPDATE tblstockcontrol SET status = 'INACTIVE' WHERE productID = ".$_POST['btnDelProduct']."";
+        $checkDelQuantity = mysql_query($delQuantity, $dbLink);
+
+        if($checkDelProduct && $checkDelPrice && $checkDelQuantity) echo "<script>location='product.php';</script>";
     }
     else if($_POST['btnSaveProduct'])
     {
@@ -275,17 +294,13 @@ $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); //get the file exten
             }
         }
     }
+    else if($_POST['btnCAddProduct'])
+    {
+        echo '<script>location="product.php";</script>';
+    }
     else if($_POST['btnBack'])
     {
-        echo '<script>location="";</script>';
-    }
-    else if($_POST['btnBackForward'])
-    {
-        echo '<script>location="product_manage.php";</script>';
-    }
-    else if($_POST['btnCancelProduct'])
-    {
-        echo "<script>location='';</script>";
+        echo '<script>location="product.php";</script>';
     }
     else
     { ?>
