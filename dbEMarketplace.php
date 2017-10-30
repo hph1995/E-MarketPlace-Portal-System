@@ -8,10 +8,10 @@
 	"CREATE TABLE tblproduct(productID INT(5) PRIMARY KEY AUTO_INCREMENT, productName VARCHAR(80), category VARCHAR(50), description VARCHAR(100), placeManufacture VARCHAR(100), sellerID VARCHAR(80), status CHAR(30))",
 	"CREATE TABLE tblcategory(catID INT(5) PRIMARY KEY AUTO_INCREMENT, catName VARCHAR(80), status VARCHAR(50))",
 	"CREATE TABLE tblsubscribe(subID INT(5) PRIMARY KEY AUTO_INCREMENT, sellerID VARCHAR(80), customerID VARCHAR(50))",
-	"CREATE TABLE tblsellingprice(priceID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), sellerID VARCHAR(15), sellingPrice DOUBLE)",
+	"CREATE TABLE tblsellingprice(priceID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), sellerID VARCHAR(15), sellingPrice DOUBLE, status CHAR(30))",
 	"CREATE TABLE tblrating(ratingID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), accountID VARCHAR(15), rateNumber DOUBLE)",
-	"CREATE TABLE tblstockcontrol(stockControlID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15) sellerID VARCHAR(15), quantity INT(15))",
-	"CREATE TABLE tblfavourite(favID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), accountID VARCHAR(15))",
+	"CREATE TABLE tblstockcontrol(stockControlID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15) sellerID VARCHAR(15), quantity INT(15), status CHAR(30))",
+	"CREATE TABLE tblfavourite(favID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), accountID VARCHAR(15), status CHAR(30))",
 	"CREATE TABLE tblpayment(ID INT(5) PRIMARY KEY AUTO_INCREMENT, itemName VARCHAR(100), qty INT(10), price DOUBLE, totalAmt DOUBLE, dateCr DATE, receiptNo VARCHAR(15), paymentType VARCHAR(100))");
 	
 	if($dbLink)
