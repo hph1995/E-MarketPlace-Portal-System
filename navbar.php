@@ -141,7 +141,7 @@
           </form>
         </li>
 		    <li class="nav-item">
-				<a class="nav-link" href="product_manage.php">Product</a>
+				<a class="nav-link" href="product.php">Product</a>
         </li>
         <li class="nav-item">
         <a class="nav-link" href="stock_control.php">Stock Control</a>

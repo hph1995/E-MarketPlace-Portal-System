@@ -35,10 +35,71 @@
 <script src="js/bootstrap.min.js"></script>
 <script language="javascript">
     $(document).ready(function(){
-        $("#btnStock").click(function(){
-            $('.noStock').css({display:'none'});
+        $("#btnAddProduct").click(function(){
+            $('.noProduct').css({display:'none'});
         });
     });
+
+    function addRow(num, tableID, divName, buttonId, numberOfBtn) {
+        ++num;
+        var tbl = document.getElementById(tableID);
+        row = tbl.insertRow(num);
+
+        //remove button and add button
+        var elem = document.getElementById(buttonId);
+        elem.parentNode.removeChild(elem);
+        var add = document.createElement("BUTTON");
+        var cancel = document.createElement("BUTTON");
+        var t = document.createTextNode("Submit");
+        var c = document.createTextNode("Cancel");
+        add.appendChild(t);
+        cancel.appendChild(c);
+        add.setAttribute("style", "float:left; position:relative; left: 45%;");
+        add.setAttribute("class", "btn btn-primary");
+        add.setAttribute("name", "btnSubmitProduct");
+        add.setAttribute("type", "submit");
+        cancel.setAttribute("style", "float:left; position:relative; left: 46%;");
+        cancel.setAttribute("class", "btn btn-danger");
+        cancel.setAttribute("type", "submit");
+        cancel.setAttribute("formnovalidate", "formnovalidate");
+        cancel.setAttribute("value", "#");
+        for(var i = 0; i < numberOfBtn; i++){
+            document.getElementById("btnEditProduct"+(i+1)).disabled = true;
+            document.getElementById("btnDelProduct"+(i+1)).disabled = true;
+            document.getElementById("btnEditProduct"+(i+1)).style.cursor = "not-allowed";
+            document.getElementById("btnDelProduct"+(i+1)).style.cursor = "not-allowed";
+        }
+        var newCell = row.insertCell(0);
+        newCell.setAttribute("align", "center");
+        newCell.innerHTML = num;    
+        newCell = row.insertCell(1);
+        newCell.innerHTML = '<input type="text" name="txtproName" id="txtproName" placeholder="  Product Name" style="width:100%;" autofocus required="required" />';
+        newCell = row.insertCell(2);
+        <?php 
+        echo "newCell.innerHTML = '<select name=\'sCategory\'>";
+        $getCategory = "SELECT * FROM tblcategory";
+        $checkGetCategory = mysql_query($getCategory, $dbLink);
+        if($checkGetCategory)
+        {
+            for($i = 0; $i < mysql_num_rows($checkGetCategory); $i++)
+            {
+                $categoryInfo = mysql_fetch_array($checkGetCategory);
+                echo '<option value="'.$categoryInfo['catName'].'">'.ucwords(strtolower($categoryInfo['catName'])).'</option>';
+            }
+        } 
+        echo "</select>';";?>
+        newCell = row.insertCell(3);
+        newCell.innerHTML = '<input type="text" name="txtDescr" id="txtDescr" placeholder="  Description" style="width:100%;" autofocus required="required" />';
+        newCell = row.insertCell(4);
+        newCell.innerHTML = '<input type="text" name="txtPlaceManufacture" id="txtPlaceManufacture" placeholder="  Place Manufacture" style="width:100%;" autofocus required="required" />';
+        newCell = row.insertCell(5);
+        newCell.innerHTML = '<input type="file" name="product_pic" id="product_pic" class="form-control" style="width:250px;" required/>';
+        add.setAttribute("value", "#");
+        cancel.setAttribute("name", "btnCAddCategory");
+        
+        document.getElementById(divName).appendChild(add);
+        document.getElementById(divName).appendChild(cancel);
+    }
 
     function editRow(num, stockID, pName, dIndication, descr, pManufature) {
         var tbl = document.getElementById("productTable");
@@ -131,7 +192,7 @@
    				 $uploadOk = 0;
 			}
 			// Allow certain file formats
-			if($imageFileType != "jpg" && $imageFileType != "png" && 					$imageFileType != "jpeg" && $imageFileType != "gif" && $imageFileType != "JPG" && $imageFileType != "PNG" && $imageFileType != "JPEG" && $imageFileType != "GIF") {
+			if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" && $imageFileType != "JPG" && $imageFileType != "PNG" && $imageFileType != "JPEG" && $imageFileType != "GIF") {
     		$uploadOk = 0;
 			}
 			//change the picture name when upload
@@ -170,7 +231,7 @@ $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); //get the file exten
     			}
 			}
         $sendEmail = false;
-        $addProduct = 'INSERT INTO tblproduct (productName, category, description, placeManufacture, sellerID, status) VALUES("'.strtoupper(trim($_POST['txtproName'])).'", "'.strtoupper(trim($_POST['selCategory'])).'", "'.strtoupper(trim($_POST['txtDescr'])).'", "'.strtoupper(trim($_POST['txtPlaceManufacture'])).'", "'.$_SESSION['account_id'].'", "ACTIVE")';
+        $addProduct = 'INSERT INTO tblproduct (productName, category, description, placeManufacture, sellerID, status) VALUES("'.strtoupper(trim($_POST['txtproName'])).'", "'.strtoupper(trim($_POST['sCategory'])).'", "'.strtoupper(trim($_POST['txtDescr'])).'", "'.strtoupper(trim($_POST['txtPlaceManufacture'])).'", "'.$_SESSION['account_id'].'", "ACTIVE")';
         $checkAddProduct = mysql_query($addProduct, $dbLink);
         $subscribedBuyer = "SELECT * FROM tblsubscribe WHERE sellerID = '".$_SESSION['account_id']."'";
         $checkSubscribedBuyer = mysql_query($subscribedBuyer, $dbLink);
@@ -230,8 +291,6 @@ $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); //get the file exten
     { ?>
     <form id="formProduct" name="formProduct" method="post" style="margin-top: 100px;" action="" enctype="multipart/form-data">
     <?php   
-        if($_GET['mode'] == 'view')
-        { 
             $getNumProduct = "SELECT COUNT(productID) AS intProduct FROM tblproduct WHERE status = 'ACTIVE' AND sellerID = '".$_SESSION['account_id']."'";
             $checkNum = mysql_query($getNumProduct, $dbLink);
             $numInfo = mysql_fetch_array($checkNum);
@@ -257,24 +316,26 @@ $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); //get the file exten
                     <tbody>
                         <?php 
 						//take out all picture name from staff_picture_name.txt and store each of name into array
-$file="product picture/product_picture_name.txt";
-$page = join("",file("$file")); //Converts the array to a string. Join is an alias for implode. It takes each piece of the array, and glues them together, using the first argument as "glue."
-$picture_name = explode("\n", $page);
-$picture_type_array = array("gif","png","jpg","jpeg","GIF","PNG","JPG","JPEG"); //all image type available
-for($i=0;$i<count($picture_name);$i++)
-{
-	for($k=0;$k<count($picture_type_array);$k++)
-	{
-		if(trim(strtolower($username)).".".$picture_type_array[$k] == trim(strtolower($picture_name[$i])))
-		{
-			$picture_name = $picture_name[$i];
-		}
-	}
-}
+                        $file="product picture/product_picture_name.txt";
+                        $page = join("",file("$file")); //Converts the array to a string. Join is an alias for implode. It takes each piece of the array, and glues them together, using the first argument as "glue."
+                        $picture_name = explode("\n", $page);
+                        $picture_type_array = array("gif","png","jpg","jpeg","GIF","PNG","JPG","JPEG"); //all image type available
+                        for($i=0;$i<count($picture_name);$i++)
+                        {
+                        	for($k=0;$k<count($picture_type_array);$k++)
+                        	{
+                        		if(trim(strtolower($username)).".".$picture_type_array[$k] == trim(strtolower($picture_name[$i])))
+                        		{
+                        			$picture_name = $picture_name[$i];
+                        		}
+                        	}
+                        }
+                        echo "<script>var countStockRow = 0;</script>";
                         if(mysql_num_rows($checkGetAllProduct) > 0)
                         {
                             for($i = 0; $i < mysql_num_rows($checkGetAllProduct); $i++)
                             {
+                                echo "<script>countStockRow++;</script>";
                                 $allProduct = mysql_fetch_array($checkGetAllProduct);
                                 echo '<tr id="stockRow'.($i+1).'">';
                                 echo '<td>'.($i+1).'</td>';
@@ -291,86 +352,21 @@ for($i=0;$i<count($picture_name);$i++)
                         }
                         else
                         {
-                            echo '<tr><td colspan="7" align="center">There are no product can be shown.</td></tr>';
+                            echo '<tr class="noProduct"><td colspan="7" align="center">There are no product can be shown.</td></tr>';
                         }
-                        echo '<tr><td colspan="7" align="center"><button type="submit" class="btn btn-danger" name="btnBackForward" id="btnBackForward" value="submit">Back</button></td></tr>';
+                        /*echo '<tr><td colspan="7" align="center"><button type="submit" class="btn btn-danger" name="btnBackForward" id="btnBackForward" value="submit">Back</button></td></tr>';*/
                         ?>
                     </tbody>
                 </table>
                 <br>
-            </div>
-        <?php }
-        else
-        {
-    ?>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-md-10 mx-auto">
-				<div class="dropdown">
-  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Product Management
-  <span class="caret"></span></button>
-  <ul class="dropdown-menu">
-    <li><a href="product.php">Add</a></li>
-    <li><a href="product.php?mode=view">Edit</a></li>
-    <li><a href="product.php?mode=view">Delete</a></li>
-  </ul>
-</div>
-                    <p>Please fill in all information</p>
-					<div class="control-group">
-                        <div class="form-group floating-label-form-group controls">
-                            <h6>Upload Product Picture</h6>
-                            <input type="file" name="product_pic" id="product_pic" class="form-control" style="width:250px;" required/>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="form-group floating-label-form-group controls">
-                            <label>Product Name</label>
-                            <input type="text" class="form-control" id="txtproName" name="txtproName" placeholder="Enter product name" value="<?php if($_GET['mode'] == 'view') echo $proInfo['productName'];?>" required>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="form-group floating-label-form-group controls"">
-                            <label>Category</label>
-                            <select class="form-control" id="selCategory" name="selCategory" required>
-                                <?php
-                                $getCategory = "SELECT * FROM tblcategory";
-                                $checkGetCategory = mysql_query($getCategory, $dbLink);
-                                if($checkGetCategory)
-                                {
-                                    for($i = 0; $i < mysql_num_rows($checkGetCategory); $i++)
-                                    {
-                                        $categoryInfo = mysql_fetch_array($checkGetCategory);
-                                        echo $categoryInfo['catName'];
-                                        echo '<option value="'.$categoryInfo['catName'].'">'.ucwords(strtolower($categoryInfo['catName'])).'</option>';
-                                    }
-                                } 
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="form-group floating-label-form-group controls"">
-                            <label>Description</label>
-                            <textarea class="form-control" id="txtDescr" name="txtDescr" rows="3" placeholder="Enter product description" required><?php if($_GET['mode'] == 'view') echo $proInfo['description']; ?></textarea>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="form-group floating-label-form-group controls"">
-                            <label>Place of Manufacture</label>
-                            <input type="text" class="form-control" id="txtPlaceManufacture" name="txtPlaceManufacture" placeholder="Enter place manufacture" value="<?php if($_GET['mode'] == 'view') echo $proInfo['placeManufacture'];?>" required>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <input type="submit" name="btnSubmitProduct" class="btn btn-secondary" value="<?php if($_GET['mode'] == 'view') echo 'Edit'; else echo 'Submit';?>">
-                        <input type="submit" name="btnCancelProduct" class="btn btn-danger" value="Cancel">
-                    </div>
+                <div id="divButton">
+                <?php
+                echo '<center><button type="button" class="btn btn-primary" id="btnAddProduct" onClick="addRow(countStockRow, \'productTable\', \'divButton\', \'btnAddProduct\', countStockRow);" value="submit">Add</button></center>';
+                ?>
                 </div>
             </div>
-        </div>
-    </form> 
 
-    <?php } } ?>
+    <?php } ?>
 
     <hr>
 
