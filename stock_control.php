@@ -22,7 +22,7 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script language="javascript">
-    function editRow(num, catid, cName) {
+    function editRow(num, proID, proName, qty, price) {
         var tbl = document.getElementById("productTable");
         row = document.getElementById("stockRow"+num);
 
@@ -31,27 +31,24 @@
             document.getElementById("btnEditStockControl"+(i+1)).disabled = true;
             document.getElementById("btnEditStockControl"+(i+1)).style.cursor = "not-allowed";
         }
-        document.getElementById("btnAddCategory").disabled = true;
-        document.getElementById("btnAddCategory").style.cursor = "not-allowed";
         var newCell = row.deleteCell(0);
         newCell = row.insertCell(0);
         newCell.innerHTML = num;
         newCell = row.deleteCell(1);
         newCell = row.insertCell(1);
-        newCell.innerHTML = '<input type="text" name="txtCatName" id="txtCatName" value="" placeholder="  Category Name" style="width:100%;" autofocus required="required" />';
-        document.getElementById("txtCatName").value = cName;
+        newCell.innerHTML = proName;
         newCell = row.deleteCell(2);
         newCell = row.insertCell(2);
-        newCell.innerHTML = '<input type="text" name="txtCatName" id="txtCatName" value="" placeholder="  Category Name" style="width:100%;" autofocus required="required" />';
-        document.getElementById("txtCatName").value = cName;
+        newCell.innerHTML = '<input type="text" name="txtQTY" id="txtQTY" value="" placeholder="  Quantity" style="width:100%;" autofocus required="required" />';
+        document.getElementById("txtQTY").value = qty;
         newCell = row.deleteCell(3);
         newCell = row.insertCell(3);
-        newCell.innerHTML = '<input type="text" name="txtCatName" id="txtCatName" value="" placeholder="  Category Name" style="width:100%;" autofocus required="required" />';
-        document.getElementById("txtCatName").value = cName;
+        newCell.innerHTML = '<input type="text" name="txtPrice" id="txtPrice" value="" placeholder="  Price" style="width:100%;" autofocus required="required" />';
+        document.getElementById("txtPrice").value = price;
         newCell = row.deleteCell(4);
         newCell = row.insertCell(4);
-        newCell.innerHTML = '<button type="submit" id="btnSaveCategory" name="btnSaveCategory" title="Save" style="border: 0; background: transparent; cursor:pointer;" value="" ><img src="img/save.png" width="20" height="20" /></button><button type="submit" id="btnBack" name="btnBack" title="Back" style="border: 0; background: transparent; margin-left:5px; cursor:pointer;" formnovalidate value="#"><img src="img/back.png" width="20" height="20" /></button>';
-        document.getElementById("btnSaveCategory").value = catid;
+        newCell.innerHTML = '<button type="submit" id="btnSaveStockControl" name="btnSaveStockControl" title="Save" style="border: 0; background: transparent; cursor:pointer;" value="" ><img src="img/save.png" width="20" height="20" /></button><button type="submit" id="btnBack" name="btnBack" title="Back" style="border: 0; background: transparent; margin-left:5px; cursor:pointer;" formnovalidate value="#"><img src="img/back.png" width="20" height="20" /></button>';
+        document.getElementById("btnSaveStockControl").value = proID;
     }
 
 </script>
@@ -75,22 +72,22 @@
       </div>
     </header>
     <?php
-    if($_POST['btnSaveCategory'])
+    if($_POST['btnSaveStockControl'])
     {
-        $updateCategory = "UPDATE tblcategory SET catName = '".strtoupper(trim($_POST['txtCatName']))."' WHERE catID = ".$_POST['btnSaveCategory']."";
-        $checkupdateCategory = mysql_query($updateCategory, $dbLink);
-        if($checkupdateCategory)
+        $updatePrice = "UPDATE tblsellingprice SET sellingPrice = ".$_POST['txtPrice']." WHERE productID = '".$_POST['btnSaveStockControl']."' AND sellerID = '".$_SESSION['account_id']."'";
+        $checkupdatePrice = mysql_query($updatePrice, $dbLink);
+
+        $updateQuantity = "UPDATE tblstockcontrol SET quantity = ".$_POST['txtQTY']." WHERE productID = '".$_POST['btnSaveStockControl']."' AND sellerID = '".$_SESSION['account_id']."'";
+        $checkupdateQuantity = mysql_query($updateQuantity, $dbLink);
+
+        if($checkupdatePrice && $checkupdateQuantity)
         {
-            echo '<script>alert("Category updated successfully.");location="";</script>';
+            echo '<script>alert("Stock updated successfully.");location="";</script>';
         }
-    }
-    else if($_POST['btnCAddCategory'])
-    {
-        echo "<script>location='category.php';</script>";
     }
     else if($_POST['btnBack'])
     {
-        echo "<script>location='category.php';</script>";
+        echo '<script>location="stock_control.php";</script>';
     }
     else
     { ?>
@@ -128,10 +125,16 @@
                             echo '<tr id="stockRow'.($i+1).'">';
                             echo '<td>'.($i+1).'</td>';
                             echo '<td>'.ucwords(strtolower($allProduct['productName'])).'</td>';
-                            $getQuantity = "SELECT * FROM tblproduct WHERE status = 'ACTIVE'";
-                            echo '<td></td>';
-                            echo '<td></td>';
-                            echo '<td><button type="button" id="btnEditStockControl'.($i+1).'" name="btnEditStockControl" title="Edit" onClick="editRow('.($i+1).', \''.ucwords(strtolower($allProduct['productID'])).'\', \''.ucwords(strtolower($allProduct['productName'])).'\');" style="border: 0; background: transparent; cursor:pointer;" value="'.$stockInfo['drugID'].'" ><img src="img/edit.png" width="20" height="20" alt="submit" /></button></td>';
+                            $getPrice = "SELECT * FROM tblsellingprice WHERE productID = '".$allProduct['productID']."' AND sellerID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
+                            $checkGetPrice = mysql_query($getPrice, $dbLink);
+                            if($checkGetPrice) $price = mysql_fetch_array($checkGetPrice);
+
+                            $getQuantity = "SELECT * FROM tblstockcontrol WHERE productID = '".$allProduct['productID']."' AND sellerID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
+                            $checkGetQuantity = mysql_query($getQuantity, $dbLink);
+                            if($checkGetQuantity) $quantity = mysql_fetch_array($checkGetQuantity);
+                            echo '<td>'.$quantity['quantity'].'</td>';
+                            echo '<td>RM '.$price['sellingPrice'].'</td>';
+                            echo '<td><button type="button" id="btnEditStockControl'.($i+1).'" name="btnEditStockControl" title="Edit" onClick="editRow('.($i+1).', \''.ucwords(strtolower($allProduct['productID'])).'\', \''.ucwords(strtolower($allProduct['productName'])).'\', \''.$price['sellingPrice'].'\', \''.$quantity['quantity'].'\');" style="border: 0; background: transparent; cursor:pointer;" value="'.$allProduct['productID'].'" ><img src="img/edit.png" width="20" height="20" alt="submit" /></button></td>';
                             echo '</tr>';
                         }
                     }
