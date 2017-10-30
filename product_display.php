@@ -48,10 +48,7 @@
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="post-preview">
             <h1 class="post-title" align="center">
-				<?php if($_GET['mode'] == 'clothing') echo "Clothing"; ?>
-				<?php if($_GET['mode'] == 'electronic') echo "Electronic"; ?>
-				<?php if($_GET['mode'] == 'sport') echo "Sport"; ?>
-				<?php if($_GET['mode'] == 'travel') echo "Travel"; ?>
+				<?php echo ucwords(strtolower($_GET['mode'])); ?>
 			</h1>
 		  </div>
         </div>
@@ -65,19 +62,12 @@
         $numInfo = mysql_fetch_array($checkNum);
 
         $getAllClothing = "SELECT * FROM tblproduct WHERE category = '".$_GET['mode']."'";
-		/*$getAllElectronic = "SELECT * FROM tblproduct WHERE category = 'ELECTRONIC'";
-		$getAllSport = "SELECT * FROM tblproduct WHERE category = 'SPORT'";
-		$getAllTravel = "SELECT * FROM tblproduct WHERE category = 'TRAVEL'";*/
-		
         $checkGetAllClothing = mysql_query($getAllClothing, $dbLink);
-		/*$checkGetAllElectronic = mysql_query($getAllElectronic, $dbLink);
-		$checkGetAllSport = mysql_query($getAllSport, $dbLink);
-		$checkGetAllTravel = mysql_query($getAllTravel, $dbLink);*/
         ?>
     
             <div style="margin: 10px;">  
-                <table id="productTable" class="table table-hover" style="width: 100%">
-                    <thead>
+                <table id="productTable" class="table table-hover" style="width: 80%; margin-left: 10%;">
+                    <!--<thead>
                         <tr>
                           <th>No</th>
                           <th>Product Name</th>
@@ -88,75 +78,49 @@
                     </thead>
                     <tbody>
                         <?php				
-							//if($_GET['mode'] == 'clothing')	{
-								if(mysql_num_rows($checkGetAllClothing) > 0)
+							/*if(mysql_num_rows($checkGetAllClothing) > 0)
+							{
+								for($i = 0; $i < mysql_num_rows($checkGetAllClothing); $i++)
 								{
-									for($i = 0; $i < mysql_num_rows($checkGetAllClothing); $i++)
-									{
-										$allProduct = mysql_fetch_array($checkGetAllClothing);
-										echo '<tr id="stockRow'.($i+1).'">';
-										echo '<td>'.($i+1).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['productName'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['placeManufacture'])).'</td>';
-										echo '</tr>';
-									}
+									$allProduct = mysql_fetch_array($checkGetAllClothing);
+									echo '<tr id="stockRow'.($i+1).'">';
+									echo '<td>'.($i+1).'</td>';
+									echo '<td>'.ucwords(strtolower($allProduct['productName'])).'</td>';
+									echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
+									echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';
+									echo '<td>'.ucwords(strtolower($allProduct['placeManufacture'])).'</td>';
+									echo '</tr>';
 								}
-							/*}
-							else if($_GET['mode'] == 'electronic') {
-								if(mysql_num_rows($checkGetAllElectronic) > 0)
-								{
-									for($i = 0; $i < mysql_num_rows($checkGetAllElectronic); $i++)
-									{
-										$allProduct = mysql_fetch_array($checkGetAllElectronic);
-										echo '<tr id="stockRow'.($i+1).'">';
-										echo '<td>'.($i+1).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['productName'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['placeManufacture'])).'</td>';
-										echo '</tr>';
-									}
-								}
+							}*/
+						?>
+                    </tbody>-->
+                    <tr>
+                    	<?php
+                    	if(mysql_num_rows($checkGetAllClothing) > 0)
+						{
+							for($i = 0; $i < mysql_num_rows($checkGetAllClothing); $i++)
+							{
+								$allProduct = mysql_fetch_array($checkGetAllClothing);
+								echo "<td>";
+		                    	echo '<figure class="figure">';
+								echo '<img src="img/android.jpg" class="img-fluid img-thumbnail" alt="'.ucwords(strtolower($allProduct['productName'])).'">';
+								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 20px;">'.ucwords(strtolower($allProduct['productName'])).'</figcaption>';
+								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000;">'.ucwords(strtolower($allProduct['description'])).'</figcaption>';
+								echo '<div style="text-align:center"><a href="#" class="btn btn-info" style="text-align:center;"><span class="fa fa-shopping-cart"></span> Add to Cart</a></div>';
+								echo '<div style="text-align:center"><a href="#" style="font-size:12px;">Add to favourite</a></div>';
+								echo '</figure>';
+		                    	echo '</td>';
+		                    	if((($i+1) % 3) == 0)
+		                    	{
+		                    		echo '</tr><tr>';
+		                    	}
 							}
-							else if($_GET['mode'] == 'sport') {								
-								if(mysql_num_rows($checkGetAllSport) > 0)
-								{
-									for($i = 0; $i < mysql_num_rows($checkGetAllSport); $i++)
-									{
-										$allProduct = mysql_fetch_array($checkGetAllSport);
-										echo '<tr id="stockRow'.($i+1).'">';
-										echo '<td>'.($i+1).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['productName'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['placeManufacture'])).'</td>';
-										echo '</tr>';
-									}
-								}	
-							}	
-							else if($_GET['mode'] == 'travel') {
-								if(mysql_num_rows($checkGetAllTravel) > 0)
-								{
-									for($i = 0; $i < mysql_num_rows($checkGetAllTravel); $i++)
-									{
-										$allProduct = mysql_fetch_array($checkGetAllTravel);
-										echo '<tr id="stockRow'.($i+1).'">';
-										echo '<td>'.($i+1).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['productName'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';
-										echo '<td>'.ucwords(strtolower($allProduct['placeManufacture'])).'</td>';
-										echo '</tr>';
-									}
-								}
-							}	*/
-							?>
-                    </tbody>
+						}?>
+                    </tr>
                 </table>
                 <br>
             </div>
+
     <hr>
 
     <!-- Footer -->

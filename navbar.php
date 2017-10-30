@@ -140,9 +140,12 @@
             </div>
           </form>
         </li>
-		<li class="nav-item">
+		    <li class="nav-item">
 				<a class="nav-link" href="product_manage.php">Product</a>
-            </li>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="stock_control.php">Stock Control</a>
+        </li>
 				<li class="nav-item">
 				<a class="nav-link" href="account_profile.php">'.$_SESSION['account_login'].'</a>
             </li>
