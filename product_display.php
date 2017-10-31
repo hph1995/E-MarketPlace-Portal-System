@@ -96,26 +96,49 @@
                     </tbody>-->
                     <tr>
                     	<?php
+                      //take out all picture name from staff_picture_name.txt and store each of name into array
+                      $file="product picture/product_picture_name.txt";
+                      $page = join("",file("$file")); //Converts the array to a string. Join is an alias for implode. It takes each piece of the array, and glues them together, using the first argument as "glue."
+                      $picture_name = explode("\n", $page);
+                      $picture_type_array = array("gif","png","jpg","jpeg","GIF","PNG","JPG","JPEG"); //all image type available
+                      for($i=0;$i<count($picture_name);$i++)
+                      {
+                        for($k=0;$k<count($picture_type_array);$k++)
+                        {
+                          if(trim(strtolower($username)).".".$picture_type_array[$k] == trim(strtolower($picture_name[$i])))
+                          {
+                            $picture_name = $picture_name[$i];
+                          }
+                        }
+                      }
                     	if(mysql_num_rows($checkGetAllClothing) > 0)
-						{
-							for($i = 0; $i < mysql_num_rows($checkGetAllClothing); $i++)
-							{
-								$allProduct = mysql_fetch_array($checkGetAllClothing);
-								echo "<td>";
-		                    	echo '<figure class="figure">';
-								echo '<img src="img/android.jpg" class="img-fluid img-thumbnail" alt="'.ucwords(strtolower($allProduct['productName'])).'">';
-								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 20px;">'.ucwords(strtolower($allProduct['productName'])).'</figcaption>';
-								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000;">'.ucwords(strtolower($allProduct['description'])).'</figcaption>';
-								echo '<div style="text-align:center"><a href="#" class="btn btn-info" style="text-align:center;"><span class="fa fa-shopping-cart"></span> Add to Cart</a></div>';
-								echo '<div style="text-align:center"><a href="#" style="font-size:12px;">Add to favourite</a></div>';
-								echo '</figure>';
-		                    	echo '</td>';
-		                    	if((($i+1) % 3) == 0)
-		                    	{
-		                    		echo '</tr><tr>';
-		                    	}
-							}
-						}?>
+          						{
+          							for($i = 0; $i < mysql_num_rows($checkGetAllClothing); $i++)
+          							{
+          								$allProduct = mysql_fetch_array($checkGetAllClothing);
+          								echo "<td>";
+          		            echo '<figure class="figure">';
+          								echo '<center><img src="product picture/'.$picture_name[$i].'" class="img-responsive img-fluid img-thumbnail" alt="'.ucwords(strtolower($allProduct['productName'])).'"></center>';
+          								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 20px;">'.ucwords(strtolower($allProduct['productName'])).'</figcaption>';
+          								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 15px;">'.ucwords(strtolower($allProduct['description'])).'</figcaption>';
+                          $getProPrice = "SELECT * FROM tblsellingprice WHERE productID = '".$allProduct['productID']."'";
+                          $checkGetProPrice = mysql_query($getProPrice, $dbLink);
+                          if($checkGetProPrice) $price = mysql_fetch_array($checkGetProPrice);
+                          echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 15px;"><i>RM '.$price['sellingPrice'].'</i></figcaption>';
+                          $getProSeller = "SELECT * FROM tblpersonnel WHERE tblpersonnel.accountID = '".$allProduct['sellerID']."'";
+                          $checkGetProSeller = mysql_query($getProSeller, $dbLink);
+                          if($checkGetProSeller) $sellerName = mysql_fetch_array($checkGetProSeller);
+                          echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 15px;"><i>Sold By '.$sellerName['name'].'</i></figcaption>';
+          								echo '<a href="cart.php?pid='.$allProduct['productID'].'" class="btn btn-info btn-xs" style="text-align:center;"><span class="fa fa-shopping-cart"></span> Add to Cart</a>';
+          								echo '<div style="text-align:center"><a href="#" style="font-size:12px;">Add to favourite</a></div>';
+          								echo '</figure>';
+          		                    	echo '</td>';
+          		                    	if((($i+1) % 3) == 0)
+          		                    	{
+          		                    		echo '</tr><tr>';
+          		                    	}
+          							}
+          						}?>
                     </tr>
                 </table>
                 <br>
