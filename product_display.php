@@ -56,14 +56,15 @@
     </div>
 
     <?php
-      $getAllClothing = "SELECT * FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 AND tblproduct.category = '".$_GET['mode']."'";
+      $getAllClothing = "SELECT MAX(tblproduct.productID) as number FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 AND tblproduct.category = '".$_GET['mode']."' LIMIT 1";
       $checkGetAllClothing = mysql_query($getAllClothing, $dbLink);
+      $result = mysql_fetch_array($checkGetAllClothing);
       $count = 1;
-      while ($row = mysql_fetch_array($checkGetAllClothing, MYSQL_ASSOC))
+      for($i = 0; $i < $result['number']; $i++)
       {
         if($_POST["btnAddCart$count"])
         {
-          $update_status = mysql_query("INSERT INTO tblcart (productID, accountID, status) VALUES('".$row['productID']."', '".$_SESSION['account_id']."', 'ACTIVE')");
+          $update_status = mysql_query("INSERT INTO tblcart (productID, accountID, status) VALUES('".$count."', '".$_SESSION['account_id']."', 'ACTIVE')");
         }
         $count += 1;
       }
