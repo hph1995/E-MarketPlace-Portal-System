@@ -116,7 +116,7 @@
                 </table>
                 <br>
             </div>
-
+      </form>
     <hr>
 
     <!-- Footer -->
