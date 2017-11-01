@@ -124,7 +124,11 @@
             </li>
 				<li class="nav-item">
 				<a class="nav-link" href="logout.php">logout</a>
+            </li>
+        <li class="nav-item">
+        <a class="nav-link" href="cart.php"><span class="fa fa-shopping-cart"></span></a>
             </li>';
+
 			} else if(isset($_SESSION['account_login']) && $type == "SELLER")
 			{
 				echo '
@@ -151,6 +155,9 @@
             </li>
 				<li class="nav-item">
 				<a class="nav-link" href="logout.php">logout</a>
+            </li>
+        <li class="nav-item">
+        <a class="nav-link" href="cart.php"><span class="fa fa-shopping-cart"></span></a>
             </li>';
 			
 			} else if(isset($_SESSION['account_login']) && $type == "STAFF")
