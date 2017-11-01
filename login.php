@@ -66,11 +66,11 @@ session_start();
 				$_SESSION['account_email'] = strtolower($result['email']);
         $_SESSION['account_id'] = $account_id;
         $_SESSION['account_type'] = $acc_type;
-				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'customer_homepage.php';</script>";
+				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'index.php';</script>";
 			}
 			else if($acc_type == 'ADMINISTRATOR')
 			{
-				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'admin.php';</script>";
+				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'index.php';</script>";
 				$_SESSION['account_login'] = strtoupper($_POST['username']);
         $_SESSION['account_type'] = $acc_type;
         $_SESSION['account_id'] = $account_id;
@@ -79,14 +79,14 @@ session_start();
 			{
         $_SESSION['account_id'] = $account_id;
         $_SESSION['account_type'] = $acc_type;
-				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'seller_homepage.php';</script>";
+				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'index.php';</script>";
 				$_SESSION['account_login'] = strtoupper($_POST['username']);
 			}
 			else if($acc_type == 'STAFF')
 			{
         $_SESSION['account_type'] = $acc_type;
         $_SESSION['account_id'] = $account_id;
-				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'staff_homepage.php';</script>";
+				echo "<script>alert('"."WELCOME! ".strtoupper($_POST['username'])."');location = 'index.php';</script>";
 				$_SESSION['account_login'] = strtoupper($_POST['username']);
 			}
 		}

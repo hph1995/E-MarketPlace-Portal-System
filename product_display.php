@@ -54,21 +54,7 @@
         </div>
       </div>
     </div>
-
-    <?php
-      $getAllClothing = "SELECT MAX(tblproduct.productID) as number FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 AND tblproduct.category = '".$_GET['mode']."' LIMIT 1";
-      $checkGetAllClothing = mysql_query($getAllClothing, $dbLink);
-      $result = mysql_fetch_array($checkGetAllClothing);
-      $count = 1;
-      for($i = 0; $i < $result['number']; $i++)
-      {
-        if($_POST["btnAddCart$count"])
-        {
-          $update_status = mysql_query("INSERT INTO tblcart (productID, accountID, status) VALUES('".$count."', '".$_SESSION['account_id']."', 'ACTIVE')");
-        }
-        $count += 1;
-      }
-    ?>
+	
     <form id="formProduct" name="formProduct" method="post" style="margin-top: 100px;" action="" enctype="multipart/form-data">
     <?php   
         $getNumProduct = "SELECT COUNT(productID) AS intProduct FROM tblproduct";
@@ -116,18 +102,14 @@
                           $checkGetProSeller = mysql_query($getProSeller, $dbLink);
                           if($checkGetProSeller) $sellerName = mysql_fetch_array($checkGetProSeller);
                           echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 15px;"><i>Sold By '.$sellerName['name'].'</i></figcaption>';
-                          $checkCart = "SELECT * FROM tblcart WHERE productID = '".$allProduct['productID']."' AND accountID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
-                          $getCheckCart = mysql_query($checkCart, $dbLink);
-          								echo '<button name="btnAddCart'.$allProduct['productID'].'" class="btn btn-info btn-xs" style="text-align:center;" value="submit" ';
-                          if(mysql_num_rows($getCheckCart) > 0) echo "disabled";
-                          echo '><span class="fa fa-shopping-cart"></span> Add to Cart</button>';
+          								echo '<a href="cart.php?pid='.$allProduct['productID'].'" class="btn btn-info btn-xs" style="text-align:center;"><span class="fa fa-shopping-cart"></span> Add to Cart</a>';
           								echo '<div style="text-align:center"><a href="#" style="font-size:12px;">Add to favourite</a></div>';
           								echo '</figure>';
-          		            echo '</td>';
-          		            if((($i+1) % 3) == 0)
-          		            {
-          		            	echo '</tr><tr align="center">';
-          		            }
+          		                    	echo '</td>';
+          		                    	if((($i+1) % 3) == 0)
+          		                    	{
+          		                    		echo '</tr><tr align="center">';
+          		                    	}
           							}
           						}?>
                     </tr>

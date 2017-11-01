@@ -44,8 +44,9 @@
         </div>
       </div>
     </header>
+    <!-- Main Content -->
 	<?php
-      $getAllClothing = "SELECT MAX(tblproduct.productID) as number FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 LIMIT 1";
+	$getAllClothing = "SELECT MAX(tblproduct.productID) as number FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 LIMIT 1";
       $checkGetAllClothing = mysql_query($getAllClothing, $dbLink);
       $result = mysql_fetch_array($checkGetAllClothing);
       $count = 1;
@@ -57,8 +58,7 @@
         }
         $count += 1;
       }
-    ?>
-    <!-- Main Content -->
+	  ?>
 	<form id="index" name="index" method="post" style="" action="" enctype="multipart/form-data">
     <div class="container" style="box-shadow: 0 0 15px #dbdbdb; padding:0 15px 0 15px;">
       <div class="row">
@@ -67,35 +67,66 @@
 		 <br>
               All Products
             </h2>
+			
+			<table id="productTable" class="" style="" align="center" border=0>
+            <tr align="">
+			<br>
+			<td>SORT BY:</td>
+			<td>
+			<select name="category" id="category" onChange="form.submit()" class="form-control" style="max-width:250px;">
+			<option value="" disabled selected></option>
+			<option <?php if($_POST['category'] == "All") echo " selected";?>>All</option>
 			<?php
-			echo '<table id="productTable" class="" style="" align="center">';
-            echo '<tr align="">';
 			$category = mysql_query("SELECT * FROM tblcategory");
 			while($row = mysql_fetch_array($category, MYSQL_ASSOC))
-			{
-				 
-				 echo '<td>';
-				 echo "<h3><input type=\"submit\" value='".$row['catName']."' name=\"btn_cat\" id=\"btn_cat\" class=\"btn btn-primary btn-xs\" style=\"width:100px; height:50px\" onClick=\"form.submit()\"/></h3>";
-				 echo '</td>';
-				
+			{	
+					?>
+					<option value = <?php echo $row['catName'];?> <?php if($_POST['category'] == $row['catName']) echo " selected";?>><?php echo $row['catName'];?></option>
+					<?php
 			}
-			echo '</tr>';
-			echo '</table>';
 			?>
-			
+			</select></td>
+			<td> Price:</td>
+			<td>
+			<select name="price" id="price" onChange="form.submit()" class="form-control" style="max-width:250px;">
+			<option value="" disabled selected></option>
+			<option value = "ORDER BY tblsellingprice.sellingPrice" <?php if($_POST['price'] == "ORDER BY tblsellingprice.sellingPrice") echo " selected";?>>Acending Order</option>
+			<option value="ORDER BY tblsellingprice.sellingPrice DESC" <?php if($_POST['price'] == "ORDER BY tblsellingprice.sellingPrice DESC") echo " selected";?>>Decending Order</option>
+			</select>
+			</td>
+			</td>
+			</tr>
+			</table>
 		<?php   
         $getNumProduct = "SELECT COUNT(productID) AS intProduct FROM tblproduct";
         $checkNum = mysql_query($getNumProduct, $dbLink);
         $numInfo = mysql_fetch_array($checkNum);
 		$value = $_POST['btn_cat'];
-		if($value == NULL)
+		if($_POST['category'] == "All")
 		{
-			$getAllClothing = "SELECT * FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0";
+        $getAllClothing = "SELECT * FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 AND tblproduct.productName LIKE '%".$_GET['id']."%'";
+		}
+		else if(isset($_POST['category']))
+		{
+			$getAllClothing = "SELECT * FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 AND tblproduct.productName LIKE '%".$_GET['id']."%' AND tblproduct.category='".$_POST['category']."'";
 		}
 		else
 		{
-			$getAllClothing = "SELECT * FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 AND tblproduct.category = '$value'";
+			$getAllClothing = "SELECT * FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 AND tblproduct.productName LIKE '%".$_GET['id']."%'";
 		}
+		
+		if(isset($_POST['price']))
+		{
+			if($_POST['category'] == "All")
+			{
+				$getAllClothing = "SELECT * FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 AND tblproduct.productName LIKE '%".$_GET['id']."%' ".$_POST['price']."";
+			}
+			else
+			{
+				$getAllClothing = "SELECT * FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 AND tblproduct.productName LIKE '%".$_GET['id']."%' AND tblproduct.category='".$_POST['category']."' ".$_POST['price']."";
+			}
+		}
+		
         $checkGetAllClothing = mysql_query($getAllClothing, $dbLink);
         ?>
     

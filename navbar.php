@@ -25,6 +25,10 @@
 
   <body>
 <?php 
+	if(isset($_POST['search']))
+	{
+		echo "<script>location = 'search.php?id=".$_POST['txt_search']."';</script>";
+	}
 	$accountID = mysql_query("SELECT * FROM tblaccount WHERE username = '".$_SESSION['account_login']."'");
 			while ($row = mysql_fetch_array($accountID, MYSQL_ASSOC))
 			{
@@ -34,6 +38,7 @@
 			}
 	?>
   <!-- Navbar -->
+  <form name="sentMessage" id="contactForm" method="post">
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
         <a class="navbar-brand" href="index.php">Deallo</a>
@@ -53,11 +58,11 @@
 			<li class="nav-item">
           <form class="form-inline my-2 my-lg-0 mr-lg-2">
             <div class="input-group">
-              <input class="form-control" type="text" placeholder="Search for...">
+              <input class="form-control" type="text" placeholder="Search for..." name="txt_search" id="txt_search">
               <span class="input-group-btn">
-                <button class="btn btn-warning" type="button">
+			  <button class="btn btn-warning" type="submit" name="search" id="search" onClick="form.submit()">
                   <i class="fa fa-search"></i>
-                </button>
+				  </button>
               </span>
             </div>
           </form>
@@ -106,7 +111,7 @@
             <div class="input-group">
               <input class="form-control" type="text" placeholder="Search for...">
               <span class="input-group-btn">
-                <button class="btn btn-warning" type="button">
+               <button class="btn btn-warning" type="submit" name="search" id="search" onClick="form.submit()">
                   <i class="fa fa-search"></i>
                 </button>
               </span>
@@ -124,11 +129,7 @@
             </li>
 				<li class="nav-item">
 				<a class="nav-link" href="logout.php">logout</a>
-            </li>
-        <li class="nav-item">
-        <a class="nav-link" href="cart.php"><span class="fa fa-shopping-cart"></span></a>
             </li>';
-
 			} else if(isset($_SESSION['account_login']) && $type == "SELLER")
 			{
 				echo '
@@ -137,7 +138,7 @@
             <div class="input-group">
               <input class="form-control" type="text" placeholder="Search for...">
               <span class="input-group-btn">
-                <button class="btn btn-warning" type="button">
+                <button class="btn btn-warning" type="submit" name="search" id="search" onClick="form.submit()">
                   <i class="fa fa-search"></i>
                 </button>
               </span>
@@ -155,9 +156,6 @@
             </li>
 				<li class="nav-item">
 				<a class="nav-link" href="logout.php">logout</a>
-            </li>
-        <li class="nav-item">
-        <a class="nav-link" href="cart.php"><span class="fa fa-shopping-cart"></span></a>
             </li>';
 			
 			} else if(isset($_SESSION['account_login']) && $type == "STAFF")
@@ -190,7 +188,7 @@
             <div class="input-group">
               <input class="form-control" type="text" placeholder="Search for...">
               <span class="input-group-btn">
-                <button class="btn btn-warning" type="button">
+                <button class="btn btn-warning" type="submit" name="search" id="search" onClick="form.submit()">
                   <i class="fa fa-search"></i>
                 </button>
               </span>
@@ -216,7 +214,7 @@
         </div>
       </div>
     </nav>
-	
+	</form>
   </body>
 
 </html>
