@@ -93,12 +93,12 @@
     { ?>
     <form id="formCategory" name="formCategory" method="post" style="margin-top: 100px;" action="">
     <?php   
-        $getNumProduct = "SELECT COUNT(productID) AS intProduct FROM tblproduct WHERE status = 'ACTIVE'";
+        $getNumProduct = "SELECT COUNT(productID) AS intProduct FROM tblproduct WHERE sellerID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
         $checkNum = mysql_query($getNumProduct, $dbLink);
         $numInfo = mysql_fetch_array($checkNum);
         echo '<script type="text/javascript">var countRow = '.$numInfo['intProduct'].';</script>';
 
-        $getAllProduct = "SELECT * FROM tblproduct WHERE status = 'ACTIVE'";
+        $getAllProduct = "SELECT * FROM tblproduct WHERE sellerID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
         $checkgetAllProduct = mysql_query($getAllProduct, $dbLink);
         ?>
         <div class="container">

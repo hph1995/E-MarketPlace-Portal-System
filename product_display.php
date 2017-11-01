@@ -61,40 +61,13 @@
         $checkNum = mysql_query($getNumProduct, $dbLink);
         $numInfo = mysql_fetch_array($checkNum);
 
-        $getAllClothing = "SELECT * FROM tblproduct WHERE category = '".$_GET['mode']."'";
+        $getAllClothing = "SELECT * FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 AND tblproduct.category = '".$_GET['mode']."'";
         $checkGetAllClothing = mysql_query($getAllClothing, $dbLink);
         ?>
     
             <div style="margin: 10px;">  
                 <table id="productTable" class="table table-hover" style="width: 80%; margin-left: 10%;">
-                    <!--<thead>
-                        <tr>
-                          <th>No</th>
-                          <th>Product Name</th>
-                          <th>Category</th>
-                          <th>Description</th>
-                          <th>Place Manufacture</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php				
-							/*if(mysql_num_rows($checkGetAllClothing) > 0)
-							{
-								for($i = 0; $i < mysql_num_rows($checkGetAllClothing); $i++)
-								{
-									$allProduct = mysql_fetch_array($checkGetAllClothing);
-									echo '<tr id="stockRow'.($i+1).'">';
-									echo '<td>'.($i+1).'</td>';
-									echo '<td>'.ucwords(strtolower($allProduct['productName'])).'</td>';
-									echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
-									echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';
-									echo '<td>'.ucwords(strtolower($allProduct['placeManufacture'])).'</td>';
-									echo '</tr>';
-								}
-							}*/
-						?>
-                    </tbody>-->
-                    <tr>
+                    <tr align="center">
                     	<?php
                       //take out all picture name from staff_picture_name.txt and store each of name into array
                       $file="product picture/product_picture_name.txt";
@@ -118,7 +91,7 @@
           								$allProduct = mysql_fetch_array($checkGetAllClothing);
           								echo "<td>";
           		            echo '<figure class="figure">';
-          								echo '<center><img src="product picture/'.$picture_name[$i].'" class="img-responsive img-fluid img-thumbnail" alt="'.ucwords(strtolower($allProduct['productName'])).'"></center>';
+          								echo '<center><img src="product picture/'.$picture_name[$i].'" style="max-width:100px" class="img-responsive img-fluid img-thumbnail" alt="'.ucwords(strtolower($allProduct['productName'])).'"></center>';
           								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 20px;">'.ucwords(strtolower($allProduct['productName'])).'</figcaption>';
           								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 15px;">'.ucwords(strtolower($allProduct['description'])).'</figcaption>';
                           $getProPrice = "SELECT * FROM tblsellingprice WHERE productID = '".$allProduct['productID']."'";
@@ -135,7 +108,7 @@
           		                    	echo '</td>';
           		                    	if((($i+1) % 3) == 0)
           		                    	{
-          		                    		echo '</tr><tr>';
+          		                    		echo '</tr><tr align="center">';
           		                    	}
           							}
           						}?>
