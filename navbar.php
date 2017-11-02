@@ -124,6 +124,9 @@
 				<li class="nav-item">
         <a class="nav-link" href="seller_form.php">Apply a Seller</a>
             </li>
+			<li class="nav-item">
+        <a class="nav-link" href="collection.php">Collection</a>
+        </li>
 				<li class="nav-item">
 				<a class="nav-link" href="account_profile.php">'.$_SESSION['account_login'].'</a>
             </li>
@@ -150,6 +153,9 @@
         </li>
         <li class="nav-item">
         <a class="nav-link" href="stock_control.php">Stock Control</a>
+        </li>
+		<li class="nav-item">
+        <a class="nav-link" href="collection.php">Collection</a>
         </li>
 				<li class="nav-item">
 				<a class="nav-link" href="account_profile.php">'.$_SESSION['account_login'].'</a>
