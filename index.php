@@ -3,6 +3,7 @@
 	session_start();
     include('dbEMarketplace.php');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,6 +26,27 @@
 
     <!-- Custom styles for this template -->
     <link href="css/clean-blog.min.css" rel="stylesheet">
+    <script type="text/javascript">
+      
+      function saveRate(rateNum, pID, isPresent, accID)
+      {
+          $.ajax({
+            type: 'POST',
+            url: 'rate.php',
+            data: {
+              "rateNum": rateNum,
+              "pID": pID,
+              "flagPresent": isPresent,
+              "accID": accID
+            },
+            success: function(data){
+              if (data == "Success")
+
+            }
+          });
+      }
+
+    </script>
 
   </head>
 
@@ -75,7 +97,7 @@
 			{
 				 
 				 echo '<td>';
-				 echo "<h3><input type=\"submit\" value='".$row['catName']."' name=\"btn_cat\" id=\"btn_cat\" class=\"btn btn-primary btn-xs\" style=\"width:100px; height:50px\" onClick=\"form.submit()\"/></h3>";
+				 echo "<h3><input type=\"submit\" value='".$row['catName']."' name=\"btn_cat\" id=\"btn_cat\" class=\"btn btn-primary btn-xs\" onClick=\"form.submit()\"/></h3>";
 				 echo '</td>';
 				
 			}
@@ -99,8 +121,8 @@
         $checkGetAllClothing = mysql_query($getAllClothing, $dbLink);
         ?>
     
-            <div style="margin: 10px;">  
-                <table id="productTable" class="table table-hover" style="width: 80%; margin-left: 10%;">
+            <div style="" class="container">  
+                <table id="productTable" class="table table-hover" style="">
                     <tr align="center">
                     	<?php
                       //take out all picture name from staff_picture_name.txt and store each of name into array
@@ -142,6 +164,24 @@
                           if(mysql_num_rows($getCheckCart) > 0) echo "disabled";
                           echo '><span class="fa fa-shopping-cart"></span> Add to Cart</button>';
           								echo '<div style="text-align:center"><a href="#" style="font-size:12px;">Add to favourite</a></div>';
+                          $getRate = "SELECT * FROM tblrating WHERE productID = '".$allProduct['productID']."' AND accountID = '".$_SESSION['account_id']."'";
+                          $checkGetRate = mysql_query($getRate, $dbLink);
+                          if(mysql_num_rows($checkGetRate) > 0) {
+                            $result = mysql_fetch_array($checkGetRate);
+                            $rNumber = $result['rateNumber'];
+                            $flagPresent = "true";
+                          }
+                          else {
+                            $rNumber = 0;
+                            $flagPresent = "false";
+                          }
+                          ?>
+                          <button type="button" id="btnStar1" name="btnStar1" title="Edit" onClick="location='rate.php?rateNum=1&pID=<?php echo $allProduct['productID'];?>&flagPresent=<?php echo $flagPresent;?>&accID=<?php echo $_SESSION['account_id'];?>&cat=<?php echo $value;?>';" style="border: 0; background: transparent; cursor:pointer;"><img src="<?php if($rNumber >= 1) echo 'img/yellow.png'; else echo 'img/white.png'; ?>" width="20" height="20" alt="submit" /></button>
+                          <button type="button" id="btnStar2" name="btnStar2" title="Edit" onClick="location='rate.php?rateNum=2&pID=<?php echo $allProduct['productID'];?>&flagPresent=<?php echo $flagPresent;?>&accID=<?php echo $_SESSION['account_id'];?>&cat=<?php echo $value;?>';" style="border: 0; background: transparent; cursor:pointer;"><img src="<?php if($rNumber >= 2) echo 'img/yellow.png'; else echo 'img/white.png'; ?>" width="20" height="20" alt="submit" /></button>
+                          <button type="button" id="btnStar3" name="btnStar3" title="Edit" onClick="location='rate.php?rateNum=3&pID=<?php echo $allProduct['productID'];?>&flagPresent=<?php echo $flagPresent;?>&accID=<?php echo $_SESSION['account_id'];?>&cat=<?php echo $value;?>';" style="border: 0; background: transparent; cursor:pointer;"><img src="<?php if($rNumber >= 3) echo 'img/yellow.png'; else echo 'img/white.png'; ?>" width="20" height="20" alt="submit" /></button>
+                          <button type="button" id="btnStar4" name="btnStar4" title="Edit" onClick="location='rate.php?rateNum=4&pID=<?php echo $allProduct['productID'];?>&flagPresent=<?php echo $flagPresent;?>&accID=<?php echo $_SESSION['account_id'];?>&cat=<?php echo $value;?>';" style="border: 0; background: transparent; cursor:pointer;"><img src="<?php if($rNumber >= 4) echo 'img/yellow.png'; else echo 'img/white.png'; ?>" width="20" height="20" alt="submit" /></button>
+                          <button type="button" id="btnStar5" name="btnStar5" title="Edit" onClick="location='rate.php?rateNum=5&pID=<?php echo $allProduct['productID'];?>&flagPresent=<?php echo $flagPresent;?>&accID=<?php echo $_SESSION['account_id'];?>&cat=<?php echo $value;?>';" style="border: 0; background: transparent; cursor:pointer;"><img src="<?php if($rNumber >= 5) echo 'img/yellow.png'; else echo 'img/white.png'; ?>" width="20" height="20" alt="submit" /></button>
+                          <?php
           								echo '</figure>';
           		            echo '</td>';
           		            if((($i+1) % 3) == 0)
