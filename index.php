@@ -177,7 +177,7 @@
 						  
 						  $checkFav = "SELECT * FROM tblfavourite WHERE productID = '".$allProduct['productID']."' AND accountID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
                           $getCheckFav = mysql_query($checkFav, $dbLink);
-          								echo '<button name="addToFav'.$allProduct['productID'].'" class="btn btn-info btn-xs" style="text-align:center;" value="submit" ';
+          								echo '<button style="background:none!important; color:inherit; border:none; padding:0!important; font: inherit; border-bottom:1px solid #444; cursor: pointer;" name="addToFav'.$allProduct['productID'].'" class="btn btn-info btn-xs" style="text-align:center;" value="submit" ';
                           if(mysql_num_rows($getCheckFav) > 0) echo "disabled";
                           echo '><span class="fa fa-my-collection"></span> Add to Favourite</button>';
 										
