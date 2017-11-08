@@ -71,6 +71,7 @@
       $checkGetAllClothing = mysql_query($getAllClothing, $dbLink);
       $result = mysql_fetch_array($checkGetAllClothing);
       $count = 1;
+	  $int = 1;
       for($i = 0; $i < $result['number']; $i++)
       {
         if($_POST["btnAddCart$count"])
@@ -79,6 +80,15 @@
         }
         $count += 1;
       }
+	  
+	  for($x = 0; $x < $result['number']; $x++)
+	  {
+		  if($_POST["addToFav$int"])
+		  {
+			  $update_status = mysql_query("INSERT INTO tblfavourite (productID, accountID, status) VALUES('".$int."', '".$_SESSION['account_id']."', 'ACTIVE')");
+		  }
+		  $int += 1;
+	  }
     ?>
     <!-- Main Content -->
 	<form id="index" name="index" method="post" style="" action="" enctype="multipart/form-data">
@@ -158,12 +168,19 @@
                           $checkGetProSeller = mysql_query($getProSeller, $dbLink);
                           if($checkGetProSeller) $sellerName = mysql_fetch_array($checkGetProSeller);
                           echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 15px;"><i>Sold By '.$sellerName['name'].'</i></figcaption>';
+						  
                           $checkCart = "SELECT * FROM tblcart WHERE productID = '".$allProduct['productID']."' AND accountID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
                           $getCheckCart = mysql_query($checkCart, $dbLink);
           								echo '<button name="btnAddCart'.$allProduct['productID'].'" class="btn btn-info btn-xs" style="text-align:center;" value="submit" ';
                           if(mysql_num_rows($getCheckCart) > 0) echo "disabled";
                           echo '><span class="fa fa-shopping-cart"></span> Add to Cart</button>';
-          								echo '<div style="text-align:center"><a href="#" style="font-size:12px;">Add to favourite</a></div>';
+						  
+						  $checkFav = "SELECT * FROM tblfavourite WHERE productID = '".$allProduct['productID']."' AND accountID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
+                          $getCheckFav = mysql_query($checkFav, $dbLink);
+          								echo '<button name="addToFav'.$allProduct['productID'].'" class="btn btn-info btn-xs" style="text-align:center;" value="submit" ';
+                          if(mysql_num_rows($getCheckFav) > 0) echo "disabled";
+                          echo '><span class="fa fa-my-collection"></span> Add to Favourite</button>';
+										
                           $getRate = "SELECT * FROM tblrating WHERE productID = '".$allProduct['productID']."' AND accountID = '".$_SESSION['account_id']."'";
                           $checkGetRate = mysql_query($getRate, $dbLink);
                           if(mysql_num_rows($checkGetRate) > 0) {
