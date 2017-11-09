@@ -58,7 +58,7 @@
 			$numInfo = mysql_fetch_array($checkNum);
 			echo '<script type="text/javascript">var countRow = '.$numInfo['intProduct'].';</script>';
 
-			$getAllProduct = "SELECT * FROM tblfavourite NATURAL JOIN tblproduct WHERE status = 'ACTIVE' AND sellerID = '".$_SESSION['account_id']."'";
+			$getAllProduct = "SELECT * FROM tblfavourite NATURAL JOIN tblproduct WHERE status = 'ACTIVE' AND accountID = '".$_SESSION['account_id']."'";
 			$checkGetAllProduct = mysql_query($getAllProduct, $dbLink);
 		?>
             <div style="margin: 10px;">
