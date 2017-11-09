@@ -225,13 +225,14 @@ $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); //get the file exten
 					$newline = "\r\n"; // write new data into text file with newline
 					fwrite($myfile,$_FILES["product_pic"]["name"].$newline);
 					fclose($myfile);
+					$img_name = $_FILES["product_pic"]["name"];
     			} 
 				else 
 				{
     			}
 			}
         $sendEmail = false;
-        $addProduct = 'INSERT INTO tblproduct (productName, category, description, placeManufacture, sellerID, status) VALUES("'.strtoupper(trim($_POST['txtproName'])).'", "'.strtoupper(trim($_POST['sCategory'])).'", "'.strtoupper(trim($_POST['txtDescr'])).'", "'.strtoupper(trim($_POST['txtPlaceManufacture'])).'", "'.$_SESSION['account_id'].'", "ACTIVE")';
+        $addProduct = 'INSERT INTO tblproduct (image_name,productName, category, description, placeManufacture, sellerID, status) VALUES("'.strtoupper(trim($img_name)).'", "'.strtoupper(trim($_POST['txtproName'])).'", "'.strtoupper(trim($_POST['sCategory'])).'", "'.strtoupper(trim($_POST['txtDescr'])).'", "'.strtoupper(trim($_POST['txtPlaceManufacture'])).'", "'.$_SESSION['account_id'].'", "ACTIVE")';
         $checkAddProduct = mysql_query($addProduct, $dbLink);
 
         $getProductID = 'SELECT COUNT(productID) as intProdutID FROM tblproduct';
@@ -241,7 +242,7 @@ $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); //get the file exten
         $setPrice = 'INSERT INTO tblsellingprice (productID, sellerID, sellingPrice, status) VALUES("'.strtoupper(trim($tempProID['intProdutID'])).'", "'.$_SESSION['account_id'].'", 0, "ACTIVE")';
         $checkSetPrice = mysql_query($setPrice, $dbLink);
 
-        $setQuantity = 'INSERT INTO tblstockcontrol (productID, sellerID, quantity, status) VALUES("'.strtoupper(trim($tempProID['intProdutID'])).'", "'.$_SESSION['account_id'].'", 0, "ACTIVE")';
+        $setQuantity = 'INSERT INTO tblstockcontrol (productID, sellerID, quantity, status,paymentID) VALUES("'.strtoupper(trim($tempProID['intProdutID'])).'", "'.$_SESSION['account_id'].'", 0, "ACTIVE","")';
         $checkSetQuantity = mysql_query($setQuantity, $dbLink);
 
 
@@ -358,7 +359,7 @@ $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); //get the file exten
                                 echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
                                 echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';
                                 echo '<td>'.ucwords(strtolower($allProduct['placeManufacture'])).'</td>';
-								echo "<td><a href=\"edit_product_pic.php?id=$picture_name[$i]\"><img src=\"product picture/$picture_name[$i]\" class=\"img-responsive img-thumbnail\" alt=\"Responsive image\" style=\"max-width:80px\"></a></td>";
+								echo "<td><a href=\"edit_product_pic.php?id=$picture_name[$i]\"><img src=\"product picture/".$allProduct['image_name']."\" class=\"img-responsive img-thumbnail\" alt=\"Responsive image\" style=\"max-width:80px\"></a></td>";
 								
                                 echo '<td><button type="button" id="btnEditProduct'.($i+1).'" name="btnEditProduct" title="Edit" onClick="editRow('.($i+1).', \''.ucwords(strtolower($allProduct['productID'])).'\', \''.ucwords(strtolower($allProduct['productName'])).'\', \''.ucwords(strtolower($allProduct['category'])).'\', \''.ucwords(strtolower($allProduct['description'])).'\', \''.ucwords(strtolower($allProduct['placeManufacture'])).'\');" style="border: 0; background: transparent; cursor:pointer;" value="'.$stockInfo['drugID'].'" ><img src="img/edit.png" width="20" height="20" alt="submit" /></button>
                                 <button onclick="if(confirm(\'Are you sure want to delete?\') == true ){ return true; } else { return false;}" type="submit" id="btnDelProduct'.($i+1).'" name="btnDelProduct" title="Delete" style="border: 0; background: transparent; margin-left:5px; cursor:pointer;" value="'.$allProduct['productID'].'"><img src="img/remove.png" width="20" height="20" alt="delete" /></button></td>';

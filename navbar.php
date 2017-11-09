@@ -25,6 +25,10 @@
 
   <body>
 <?php 
+	if(isset($_POST['search']))
+	{
+		echo "<script>location = 'search.php?id=".$_POST['txt_search']."';</script>";
+	}
 	$accountID = mysql_query("SELECT * FROM tblaccount WHERE username = '".$_SESSION['account_login']."'");
 			while ($row = mysql_fetch_array($accountID, MYSQL_ASSOC))
 			{
@@ -34,6 +38,7 @@
 			}
 	?>
   <!-- Navbar -->
+  <form name="sentMessage" id="contactForm" method="post">
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
         <a class="navbar-brand" href="index.php">Deallo</a>
@@ -50,14 +55,15 @@
 		
             </li>
 			
+			
 			<li class="nav-item">
           <form class="form-inline my-2 my-lg-0 mr-lg-2">
             <div class="input-group">
-              <input class="form-control" type="text" placeholder="Search for...">
+              <input class="form-control" type="text" placeholder="Search for..." name="txt_search" id="txt_search">
               <span class="input-group-btn">
-                <button class="btn btn-warning" type="button">
+			  <button class="btn btn-warning" type="submit" name="search" id="search" onClick="form.submit()">
                   <i class="fa fa-search"></i>
-                </button>
+				  </button>
               </span>
             </div>
           </form>
@@ -90,10 +96,13 @@
 				<li class="nav-item">
 				<a class="nav-link" href="staff.php">Staff</a>
             </li>
+			<li class="nav-item">
+				<a class="nav-link" href="update_receive.php">Update Receipt</a>
+            </li>
         <li class="nav-item">
         <a class="nav-link" href="category.php">Category</a>
 				<li class="nav-item">
-				<a class="nav-link" href="account_profile.php">'.$_SESSION['account_login'].'</a>
+				<a class="nav-link" href="#.php">'.$_SESSION['account_login'].'</a>
             </li>
 				<li class="nav-item">
 				<a class="nav-link" href="logout.php">logout</a>
@@ -104,11 +113,11 @@
 				<li class="nav-item">
           <form class="form-inline my-2 my-lg-0 mr-lg-2">
             <div class="input-group">
-              <input class="form-control" type="text" placeholder="Search for...">
+              <input class="form-control" type="text" placeholder="Search for..." name="txt_search" id="txt_search">
               <span class="input-group-btn">
-                <button class="btn btn-warning" type="button">
+			  <button class="btn btn-warning" type="submit" name="search" id="search" onClick="form.submit()">
                   <i class="fa fa-search"></i>
-                </button>
+				  </button>
               </span>
             </div>
           </form>
@@ -138,11 +147,11 @@
 				<li class="nav-item">
           <form class="form-inline my-2 my-lg-0 mr-lg-2">
             <div class="input-group">
-              <input class="form-control" type="text" placeholder="Search for...">
+              <input class="form-control" type="text" placeholder="Search for..." name="txt_search" id="txt_search">
               <span class="input-group-btn">
-                <button class="btn btn-warning" type="button">
+			  <button class="btn btn-warning" type="submit" name="search" id="search" onClick="form.submit()">
                   <i class="fa fa-search"></i>
-                </button>
+				  </button>
               </span>
             </div>
           </form>
@@ -177,7 +186,9 @@
 				<li class="nav-item">
 				<a class="nav-link" href="customer.php">Customer</a>
             </li>
-				
+				<li class="nav-item">
+				<a class="nav-link" href="update_receive.php">Update Receipt</a>
+            </li>
         <li class="nav-item">
         <a class="nav-link" href="category.php">Category</a>
 				<li class="nav-item">
@@ -194,11 +205,11 @@
 			<li class="nav-item">
           <form class="form-inline my-2 my-lg-0 mr-lg-2">
             <div class="input-group">
-              <input class="form-control" type="text" placeholder="Search for...">
+              <input class="form-control" type="text" placeholder="Search for..." name="txt_search" id="txt_search">
               <span class="input-group-btn">
-                <button class="btn btn-warning" type="button">
+			  <button class="btn btn-warning" type="submit" name="search" id="search" onClick="form.submit()">
                   <i class="fa fa-search"></i>
-                </button>
+				  </button>
               </span>
             </div>
           </form>
@@ -222,7 +233,7 @@
         </div>
       </div>
     </nav>
-	
+	</form>
   </body>
 
 </html>

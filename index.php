@@ -3,7 +3,20 @@
 	session_start();
     include('dbEMarketplace.php');
 ?>
-
+<?php
+	session_cache_limiter('private, must-revalidate');
+	session_start();
+    include('dbEMarketplace.php');
+	//check if the directory not exists, then create directory
+	$filename = 'product picture'; // directory
+	if (file_exists($filename)){
+	} else {
+	mkdir("product picture");
+	$myfile = fopen("product picture/product_picture_name.txt", "w") or die("Unable to open file!");
+	fwrite($myfile,"");
+	fclose($myfile);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -76,7 +89,7 @@
       {
         if($_POST["btnAddCart$count"])
         {
-          $update_status = mysql_query("INSERT INTO tblcart (productID, accountID, status) VALUES('".$count."', '".$_SESSION['account_id']."', 'ACTIVE')");
+          $update_status = mysql_query("INSERT INTO tblcart (productID, accountID, quantity, total_price, status) VALUES('".$count."', '".$_SESSION['account_id']."', 0,0, 'ACTIVE')");
         }
         $count += 1;
       }
@@ -100,7 +113,7 @@
               All Products
             </h2>
 			<?php
-			echo '<table id="productTable" class="" style="" align="center">';
+			echo '<table id="productTable" class="" style="" align="center" >';
             echo '<tr align="">';
 			$category = mysql_query("SELECT * FROM tblcategory");
 			while($row = mysql_fetch_array($category, MYSQL_ASSOC))
@@ -124,6 +137,7 @@
 		{
 			$getAllClothing = "SELECT * FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0";
 		}
+		
 		else
 		{
 			$getAllClothing = "SELECT * FROM tblproduct, tblsellingprice, tblstockcontrol WHERE tblproduct.productID = tblsellingprice.productID AND tblstockcontrol.productID = tblproduct.productID AND tblsellingprice.sellingPrice > 0 AND tblstockcontrol.quantity > 0 AND tblproduct.category = '$value'";
@@ -157,7 +171,8 @@
           								$allProduct = mysql_fetch_array($checkGetAllClothing);
           								echo "<td>";
           		            echo '<figure class="figure">';
-          								echo '<center><img src="product picture/'.$picture_name[$i].'" style="max-width:100px; max-height:100px;" class="img-responsive img-fluid img-thumbnail" alt="'.ucwords(strtolower($allProduct['productName'])).'"></center>';
+
+          								echo '<center><img src="product picture/'.$allProduct['image_name'].'" style="max-width:100px" class="img-responsive img-fluid img-thumbnail" alt="'.ucwords(strtolower($allProduct['productName'])).'"></center>';
           								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 20px;">'.ucwords(strtolower($allProduct['productName'])).'</figcaption>';
           								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 15px;">'.ucwords(strtolower($allProduct['description'])).'</figcaption>';
                           $getProPrice = "SELECT * FROM tblsellingprice WHERE productID = '".$allProduct['productID']."'";
@@ -177,9 +192,9 @@
 						  
 						  $checkFav = "SELECT * FROM tblfavourite WHERE productID = '".$allProduct['productID']."' AND accountID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
                           $getCheckFav = mysql_query($checkFav, $dbLink);
-          								echo '<button style="background:none!important; color:inherit; border:none; padding:0!important; font: inherit; border-bottom:1px solid #444; cursor: pointer;" name="addToFav'.$allProduct['productID'].'" class="btn btn-info btn-xs" style="text-align:center;" value="submit" ';
+          								echo '<br><button style="background:none!important; color:inherit; border:none; padding:0!important; font: inherit; border-bottom:1px solid #444; cursor: pointer;" name="addToFav'.$allProduct['productID'].'" class="btn btn-info btn-xs" style="text-align:center;" value="submit" align="center"';
                           if(mysql_num_rows($getCheckFav) > 0) echo "disabled";
-                          echo '><span class="fa fa-my-collection"></span> Add to Favourite</button>';
+                          echo '><span class="fa fa-my-collection"></span> Add to Favourite</button><br>';
 										
                           $getRate = "SELECT * FROM tblrating WHERE productID = '".$allProduct['productID']."' AND accountID = '".$_SESSION['account_id']."'";
                           $checkGetRate = mysql_query($getRate, $dbLink);

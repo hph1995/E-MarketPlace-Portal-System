@@ -50,14 +50,23 @@
       $checkGetAllClothing = mysql_query($getAllClothing, $dbLink);
       $result = mysql_fetch_array($checkGetAllClothing);
       $count = 1;
+	  $int =1;
       for($i = 0; $i < $result['number']; $i++)
       {
         if($_POST["btnAddCart$count"])
         {
-          $update_status = mysql_query("INSERT INTO tblcart (productID, accountID, status) VALUES('".$count."', '".$_SESSION['account_id']."', 'ACTIVE')");
+          $update_status = mysql_query("INSERT INTO tblcart (productID, accountID, quantity, total_price, status) VALUES('".$count."', '".$_SESSION['account_id']."', 0,0, 'ACTIVE')");
         }
         $count += 1;
       }
+	    for($x = 0; $x < $result['number']; $x++)
+	  {
+		  if($_POST["addToFav$int"])
+		  {
+			  $update_status = mysql_query("INSERT INTO tblfavourite (productID, accountID, status) VALUES('".$int."', '".$_SESSION['account_id']."', 'ACTIVE')");
+		  }
+		  $int += 1;
+	  }
 	  ?>
 	<form id="index" name="index" method="post" style="" action="" enctype="multipart/form-data">
     <div class="container" style="box-shadow: 0 0 15px #dbdbdb; padding:0 15px 0 15px;">
@@ -156,7 +165,7 @@
           								$allProduct = mysql_fetch_array($checkGetAllClothing);
           								echo "<td>";
           		            echo '<figure class="figure">';
-          								echo '<center><img src="product picture/'.$picture_name[$i].'" style="max-width:100px" class="img-responsive img-fluid img-thumbnail" alt="'.ucwords(strtolower($allProduct['productName'])).'"></center>';
+          								echo '<center><img src="product picture/'.$allProduct['image_name'].'" style="max-width:100px" class="img-responsive img-fluid img-thumbnail" alt="'.ucwords(strtolower($allProduct['productName'])).'"></center>';
           								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 20px;">'.ucwords(strtolower($allProduct['productName'])).'</figcaption>';
           								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 15px;">'.ucwords(strtolower($allProduct['description'])).'</figcaption>';
                           $getProPrice = "SELECT * FROM tblsellingprice WHERE productID = '".$allProduct['productID']."'";
@@ -167,18 +176,44 @@
                           $checkGetProSeller = mysql_query($getProSeller, $dbLink);
                           if($checkGetProSeller) $sellerName = mysql_fetch_array($checkGetProSeller);
                           echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 15px;"><i>Sold By '.$sellerName['name'].'</i></figcaption>';
+						  
                           $checkCart = "SELECT * FROM tblcart WHERE productID = '".$allProduct['productID']."' AND accountID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
                           $getCheckCart = mysql_query($checkCart, $dbLink);
           								echo '<button name="btnAddCart'.$allProduct['productID'].'" class="btn btn-info btn-xs" style="text-align:center;" value="submit" ';
                           if(mysql_num_rows($getCheckCart) > 0) echo "disabled";
                           echo '><span class="fa fa-shopping-cart"></span> Add to Cart</button>';
-          								echo '<div style="text-align:center"><a href="#" style="font-size:12px;">Add to favourite</a></div>';
+						  
+						  $checkFav = "SELECT * FROM tblfavourite WHERE productID = '".$allProduct['productID']."' AND accountID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
+                          $getCheckFav = mysql_query($checkFav, $dbLink);
+          								echo '<br><button style="background:none!important; color:inherit; border:none; padding:0!important; font: inherit; border-bottom:1px solid #444; cursor: pointer;" name="addToFav'.$allProduct['productID'].'" class="btn btn-info btn-xs" style="text-align:center;" value="submit" align="center"';
+                          if(mysql_num_rows($getCheckFav) > 0) echo "disabled";
+                          echo '><span class="fa fa-my-collection"></span> Add to Favourite</button><br>';
+										
+                          $getRate = "SELECT * FROM tblrating WHERE productID = '".$allProduct['productID']."' AND accountID = '".$_SESSION['account_id']."'";
+                          $checkGetRate = mysql_query($getRate, $dbLink);
+                          if(mysql_num_rows($checkGetRate) > 0) {
+                            $result = mysql_fetch_array($checkGetRate);
+                            $rNumber = $result['rateNumber'];
+                            $flagPresent = "true";
+                          }
+                          else {
+                            $rNumber = 0;
+                            $flagPresent = "false";
+                          }
+						  $id = $_GET['id'];
+                          ?>
+                          <button type="button" id="btnStar1" name="btnStar1" title="Edit" onClick="location='rate.php?rateNum=&&search=<?php echo $id;?>&pID=<?php echo $allProduct['productID'];?>&flagPresent=<?php echo $flagPresent;?>&accID=<?php echo $_SESSION['account_id'];?>&cat=<?php echo $value;?>';" style="border: 0; background: transparent; cursor:pointer;"><img src="<?php if($rNumber >= 1) echo 'img/yellow.png'; else echo 'img/white.png'; ?>" width="20" height="20" alt="submit" /></button>
+                          <button type="button" id="btnStar2" name="btnStar2" title="Edit" onClick="location='rate.php?rateNum=2&search=<?php echo $id;?>&pID=<?php echo $allProduct['productID'];?>&flagPresent=<?php echo $flagPresent;?>&accID=<?php echo $_SESSION['account_id'];?>&cat=<?php echo $value;?>';" style="border: 0; background: transparent; cursor:pointer;"><img src="<?php if($rNumber >= 2) echo 'img/yellow.png'; else echo 'img/white.png'; ?>" width="20" height="20" alt="submit" /></button>
+                          <button type="button" id="btnStar3" name="btnStar3" title="Edit" onClick="location='rate.php?rateNum=3&search=<?php echo $id;?>&pID=<?php echo $allProduct['productID'];?>&flagPresent=<?php echo $flagPresent;?>&accID=<?php echo $_SESSION['account_id'];?>&cat=<?php echo $value;?>';" style="border: 0; background: transparent; cursor:pointer;"><img src="<?php if($rNumber >= 3) echo 'img/yellow.png'; else echo 'img/white.png'; ?>" width="20" height="20" alt="submit" /></button>
+                          <button type="button" id="btnStar4" name="btnStar4" title="Edit" onClick="location='rate.php?rateNum=4&search=<?php echo $id;?>&pID=<?php echo $allProduct['productID'];?>&flagPresent=<?php echo $flagPresent;?>&accID=<?php echo $_SESSION['account_id'];?>&cat=<?php echo $value;?>';" style="border: 0; background: transparent; cursor:pointer;"><img src="<?php if($rNumber >= 4) echo 'img/yellow.png'; else echo 'img/white.png'; ?>" width="20" height="20" alt="submit" /></button>
+                          <button type="button" id="btnStar5" name="btnStar5" title="Edit" onClick="location='rate.php?rateNum=5&search=<?php echo $id;?>&pID=<?php echo $allProduct['productID'];?>&flagPresent=<?php echo $flagPresent;?>&accID=<?php echo $_SESSION['account_id'];?>&cat=<?php echo $value;?>';" style="border: 0; background: transparent; cursor:pointer;"><img src="<?php if($rNumber >= 5) echo 'img/yellow.png'; else echo 'img/white.png'; ?>" width="20" height="20" alt="submit" /></button>
+                          <?php
           								echo '</figure>';
           		            echo '</td>';
           		            if((($i+1) % 3) == 0)
           		            {
           		            	echo '</tr><tr align="center">';
-          		            }
+          		        7;    }
           							}
           						}?>
                     </tr>

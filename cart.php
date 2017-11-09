@@ -51,7 +51,9 @@
       total += qty * price;
     }
     document.getElementById('totalResult').innerHTML = total;
+
   }
+
 
 </script>
 </head>
@@ -83,17 +85,30 @@
       }
       $count += 1;
     }
-
     if($_GET['pid'] != "")
     {
       
     }
+	else if($_POST['buy'])
+	{
+		$getCartList = "SELECT * FROM tblcart WHERE accountID = '".$_SESSION['account_id']."' AND status = 'ACTIVE'";
+		$check = 1;
+            $checkGetCartList = mysql_query($getCartList, $dbLink);
+            for($i = 0; $i < mysql_num_rows($checkGetCartList); $i++)
+            {
+				$cartDetails = mysql_fetch_array($checkGetCartList);
+				$update = "UPDATE tblcart SET quantity = '".$_POST["txtQTY$check"]."' WHERE cartID = ".$cartDetails['cartID']."";
+				$checkDelProduct = mysql_query($update, $dbLink);
+				$check++;
+			}
+			echo "<script>location='payment.php';</script>";
+	}
     else
     { ?>
     <form id="formCart" name="formCart" method="post" style="margin-top: 100px;" action="" enctype="multipart/form-data">
       <div class="container">
         <h2 style="text-align: center;">Cart List</h2><br>       
-        <table id="productTable" class="table table-hover" style="width: 100%">
+        <table id="productTable" class="table table-hover" style="width: 100%" border="0">
           <thead>
             <tr>
               <th>No</th>
@@ -124,8 +139,10 @@
               echo '</tr>';
             }
             ?>              
-            <tr><td colspan="3" align="right">Total</td><td>RM <span id="totalResult"></span></td></tr>
+            <tr><td colspan="4" align="right">Total</td><td>RM <span id="totalResult" name ="totalResult"></span></td></tr>
+			<tr><td colspan="4" align="right"></td><td><input type="submit" name="buy" id="buy" value="BUY NOW" class="btn btn-success btn-xs"/></td></tr>
             <input type="hidden" id="txtStoreTotalRow" />
+			<input type="hidden" name="price" />
             <?php echo "<script>checkTotalAmount(".$i.");</script>";?>
           </tbody>
         </table>

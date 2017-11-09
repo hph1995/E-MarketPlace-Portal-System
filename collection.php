@@ -58,7 +58,7 @@
 			$numInfo = mysql_fetch_array($checkNum);
 			echo '<script type="text/javascript">var countRow = '.$numInfo['intProduct'].';</script>';
 
-			$getAllProduct = "SELECT * FROM tblfavourite NATURAL JOIN tblproduct WHERE status = 'ACTIVE' AND accountID = '".$_SESSION['account_id']."'";
+			$getAllProduct = "SELECT * FROM tblfavourite NATURAL JOIN tblproduct WHERE status = 'ACTIVE' AND sellerID = '".$_SESSION['account_id']."'";
 			$checkGetAllProduct = mysql_query($getAllProduct, $dbLink);
 		?>
             <div style="margin: 10px;">
@@ -100,7 +100,7 @@
                                 $allProduct = mysql_fetch_array($checkGetAllProduct);
                                 echo '<tr id="stockRow'.($i+1).'">';
                                 echo '<td>'.($i+1).'</td>';
-								echo "<td><img src=\"product picture/$picture_name[$i]\" class=\"img-responsive img-thumbnail\" alt=\"Responsive image\" style=\"max-width:80px\"></td>";
+								echo "<td><img src=\"product picture/".$allProduct['image_name']."\" class=\"img-responsive img-thumbnail\" alt=\"Responsive image\" style=\"max-width:80px\"></td>";
                                 echo '<td>'.ucwords(strtolower($allProduct['productName'])).'</td>';
                                 echo '<td>'.ucwords(strtolower($allProduct['category'])).'</td>';
                                 echo '<td>'.ucwords(strtolower($allProduct['description'])).'</td>';

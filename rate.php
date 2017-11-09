@@ -6,6 +6,7 @@
 	$flagPresent = $_GET['flagPresent'];
 	$accID = $_GET['accID'];
 	$cat = $_GET['cat'];
+	$search = $_GET['search'];
 
 	if($flagPresent == "false")
 	{
@@ -13,7 +14,10 @@
 		$checkInsertRate = mysql_query($insertRate, $dbLink);
 		if($checkInsertRate)
 		{
-			echo "<script>location='index.php';</script>";
+			if($search!=NULL)
+				echo "<script>location = 'search.php?id=".$search."';</script>";
+			else
+				echo "<script>location='index.php';</script>";
 			/*if($cat == "")
 				echo "<script>location='index.php';</script>";
 			else
@@ -26,7 +30,10 @@
 		$checkUpdateRate = mysql_query($updateRate, $dbLink);
 		if($checkUpdateRate)
 		{
-			echo "<script>location='index.php';</script>";
+			if($search != NULL)
+				echo "<script>location = 'search.php?id=".$search."';</script>";
+			else
+				echo "<script>location='index.php';</script>";
 			/*if($cat == "")
 				echo "<script>location='index.php';</script>";
 			else

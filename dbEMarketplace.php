@@ -5,15 +5,15 @@
 	"CREATE TABLE tblaccount(accountID BIGINT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(100), password VARCHAR(100), accType VARCHAR(30), status CHAR(30))",	
 	"CREATE TABLE tblpersonnel(personnelID BIGINT AUTO_INCREMENT PRIMARY KEY, accountID BIGINT, name VARCHAR(50), NRIC VARCHAR(13), email VARCHAR(30), addr VARCHAR(100), city VARCHAR(100), state VARCHAR(100), country VARCHAR(100), contactNum VARCHAR(12))",
 	"CREATE TABLE tblseller(sellerID BIGINT AUTO_INCREMENT PRIMARY KEY, personnelID BIGINT, bankAccount VARCHAR(50), status VARCHAR(9))",
-	"CREATE TABLE tblproduct(productID INT(5) PRIMARY KEY AUTO_INCREMENT, productName VARCHAR(80), category VARCHAR(50), description VARCHAR(100), placeManufacture VARCHAR(100), sellerID VARCHAR(80), status CHAR(30))",
+	"CREATE TABLE tblproduct(productID INT(5) PRIMARY KEY AUTO_INCREMENT,image_name VARCHAR(10), productName VARCHAR(80), category VARCHAR(50), description VARCHAR(100), placeManufacture VARCHAR(100), sellerID VARCHAR(80), status CHAR(30))",
 	"CREATE TABLE tblcategory(catID INT(5) PRIMARY KEY AUTO_INCREMENT, catName VARCHAR(80), status VARCHAR(50))",
 	"CREATE TABLE tblsubscribe(subID INT(5) PRIMARY KEY AUTO_INCREMENT, sellerID VARCHAR(80), customerID VARCHAR(50))",
 	"CREATE TABLE tblsellingprice(priceID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), sellerID VARCHAR(15), sellingPrice DOUBLE, status CHAR(30))",
 	"CREATE TABLE tblrating(ratingID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), accountID VARCHAR(15), rateNumber DOUBLE)",
-	"CREATE TABLE tblcart(cartID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), accountID VARCHAR(15), status VARCHAR(9))",
-	"CREATE TABLE tblstockcontrol(stockControlID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), sellerID VARCHAR(15), quantity INT(15), status CHAR(30))",
+	"CREATE TABLE tblcart(cartID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), accountID VARCHAR(15), quantity int, total_price FLOAT, status VARCHAR(9))",
+	"CREATE TABLE tblstockcontrol(stockControlID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), sellerID VARCHAR(15), quantity INT(15), status CHAR(30),paymentID CHAR(15))",
 	"CREATE TABLE tblfavourite(favID INT(15) PRIMARY KEY AUTO_INCREMENT, productID VARCHAR(15), accountID VARCHAR(15), status CHAR(30))",
-	"CREATE TABLE tblpayment(ID INT(5) PRIMARY KEY AUTO_INCREMENT, itemName VARCHAR(100), qty INT(10), price DOUBLE, totalAmt DOUBLE, dateCr DATE, receiptNo VARCHAR(15), paymentType VARCHAR(100))");
+	"CREATE TABLE tblpayment(ID INT(5) PRIMARY KEY AUTO_INCREMENT, itemName VARCHAR(100), qty VARCHAR(50), price VARCHAR(50), totalAmt DOUBLE, dateCr DATE, pic VARCHAR(50), status VARCHAR(20))");
 	
 	if($dbLink)
 	{
