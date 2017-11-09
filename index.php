@@ -157,7 +157,7 @@
           								$allProduct = mysql_fetch_array($checkGetAllClothing);
           								echo "<td>";
           		            echo '<figure class="figure">';
-          								echo '<center><img src="product picture/'.$picture_name[$i].'" style="max-width:100px" class="img-responsive img-fluid img-thumbnail" alt="'.ucwords(strtolower($allProduct['productName'])).'"></center>';
+          								echo '<center><img src="product picture/'.$picture_name[$i].'" style="max-width:100px; max-height:100px;" class="img-responsive img-fluid img-thumbnail" alt="'.ucwords(strtolower($allProduct['productName'])).'"></center>';
           								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 20px;">'.ucwords(strtolower($allProduct['productName'])).'</figcaption>';
           								echo '<figcaption class="figure-caption" style="text-align:center; color: #000000; font-size: 15px;">'.ucwords(strtolower($allProduct['description'])).'</figcaption>';
                           $getProPrice = "SELECT * FROM tblsellingprice WHERE productID = '".$allProduct['productID']."'";
